@@ -1,63 +1,126 @@
-import React, { useContext, useEffect } from "react";
-import "./App.css";
-import { Context } from "./main";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Login from "./components/Auth/Login";
-import Register from "./components/Auth/Register";
-import { Toaster } from "react-hot-toast";
-import axios from "axios";
-import Navbar from "./components/Layout/Navbar";
-import Footer from "./components/Layout/Footer";
-import Home from "./components/Home/Home";
-import Jobs from "./components/Job/Jobs";
-import JobDetails from "./components/Job/JobDetails";
-import Application from "./components/Application/Application";
-import MyApplications from "./components/Application/MyApplications";
-import PostJob from "./components/Job/PostJob";
-import NotFound from "./components/NotFound/NotFound";
-import MyJobs from "./components/Job/MyJobs";
+import React from "react";
+import Navbar from "./components/components_lite/Navbar";
+import Login from "./components/authentication/Login";
+import Register from "./components/authentication/Register";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Home from "./components/components_lite/Home";
+import PrivacyPolicy from "./components/components_lite/PrivacyPolicy.jsx";
+import TermsofService from "./components/components_lite/TermsofService.jsx";
+import Jobs from "./components/components_lite/Jobs.jsx";
+import Browse from "./components/components_lite/Browse.jsx";
+import Profile from "./components/components_lite/Profile.jsx";
+import Description from "./components/components_lite/Description.jsx";
+import Companies from "./components/admincomponent/Companies";
+import CompanyCreate from "./components/admincomponent/CompanyCreate";
+import CompanySetup from "./components/admincomponent/CompanySetup";
+import AdminJobs from "./components/admincomponent/AdminJobs.jsx";
+import PostJob from "./components/admincomponent/PostJob";
+import Applicants from "./components/admincomponent/Applicants";
+import ProtectedRoute from "./components/admincomponent/ProtectedRoute";
+import Creator from "./components/creator/Creator.jsx";
 
-const App = () => {
-  const { isAuthorized, setIsAuthorized, setUser } = useContext(Context);
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(
-          "http://localhost:4000/api/v1/user/getuser",
-          {
-            withCredentials: true,
-          }
-        );
-        setUser(response.data.user);
-        setIsAuthorized(true);
-      } catch (error) {
-        setIsAuthorized(false);
-      }
-    };
-    fetchUser();
-  }, [isAuthorized]);
+const appRouter = createBrowserRouter([
+  { path: "/", element: <Home /> },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/description/:id",
+    element: <Description />,
+  },
+  {
+    path: "/Profile",
+    element: <Profile />,
+  },
+  {
+    path: "/PrivacyPolicy",
+    element: <PrivacyPolicy />,
+  },
+  {
+    path: "/TermsofService",
+    element: <TermsofService />,
+  },
+  {
+    path: "/Jobs",
+    element: <Jobs />,
+  },
+  {
+    path: "/Home",
+    element: <Home />,
+  },
+  {
+    path: "/Browse",
+    element: <Browse />,
+  },
+  {
+    path:"/Creator",
+    element: <Creator/>
+  },
 
+  // /admin
+  {
+    path: "/admin/companies",
+    element: (
+      <ProtectedRoute>
+        <Companies />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/companies/create",
+    element: (
+      <ProtectedRoute>
+        <CompanyCreate />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/companies/:id",
+    element: (
+      <ProtectedRoute>
+        <CompanySetup />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs",
+    element: (
+      <ProtectedRoute>
+        {" "}
+        <AdminJobs />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs/create",
+    element: (
+      <ProtectedRoute>
+        {" "}
+        <PostJob />{" "}
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/admin/jobs/:id/applicants",
+    element: (
+      <ProtectedRoute>
+        <Applicants />
+      </ProtectedRoute>
+    ),
+  },
+]);
+
+function App() {
   return (
-    <>
-      <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/job/getall" element={<Jobs />} />
-          <Route path="/job/:id" element={<JobDetails />} />
-          <Route path="/application/:id" element={<Application />} />
-          <Route path="/applications/me" element={<MyApplications />} />
-          <Route path="/job/post" element={<PostJob />} />
-          <Route path="/job/me" element={<MyJobs />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-        <Footer />
-        <Toaster />
-      </BrowserRouter>
-    </>
+    <div>
+      <RouterProvider router={appRouter}></RouterProvider>
+    </div>
   );
-};
+}
 
 export default App;

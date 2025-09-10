@@ -1,31 +1,23 @@
-import React, { createContext, useState } from "react";
-import ReactDOM from "react-dom/client";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
 import App from "./App.jsx";
+import { Toaster } from "./components/ui/sonner";
+import { Provider } from "react-redux";
+import { persistStore } from "redux-persist";
 
-export const Context = createContext({
-  isAuthorized: false,
-});
+import store from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
 
-const AppWrapper = () => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
-  const [user, setUser] = useState({});
+const persistor = persistStore(store);
 
-  return (
-    <Context.Provider
-      value={{
-        isAuthorized,
-        setIsAuthorized,
-        user,
-        setUser,
-      }}
-    >
-      <App />
-    </Context.Provider>
-  );
-};
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <AppWrapper />
-  </React.StrictMode>
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <App />
+        <Toaster />
+      </PersistGate>
+    </Provider>
+  </StrictMode>
 );
