@@ -57,10 +57,10 @@ const PORT = process.env.PORT || 5001;
 import path from "path";
 
 // Serve static frontend
-app.use(express.static(path.join(path.resolve(), "frontend/build")));
+app.use(express.static(path.join(path.resolve(), "frontend/dist")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(path.resolve(), "frontend/build", "index.html"));
+  res.sendFile(path.join(path.resolve(), "frontend/dist", "index.html"));
 });
 
 connectDB()
