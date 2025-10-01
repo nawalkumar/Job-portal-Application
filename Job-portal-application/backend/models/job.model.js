@@ -51,7 +51,13 @@ const jobSchema = new mongoose.Schema(
         ref: "Application",
       },
     ],
+    // New field for external or internal application link
+    applicationLink: {
+      type: String,
+      required: false, // optional if some jobs don't have a direct link
+    },
   },
   { timestamps: true }
 );
+
 export const Job = mongoose.model("Job", jobSchema);

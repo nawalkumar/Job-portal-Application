@@ -12,6 +12,7 @@ export const postJob = async (req, res) => {
       experience,
       position,
       companyId,
+      applicationLink, // NEW
     } = req.body;
     const userId = req.id;
 
@@ -31,6 +32,7 @@ export const postJob = async (req, res) => {
         success: false,
       });
     }
+
     const job = await Job.create({
       title,
       description,
@@ -42,7 +44,9 @@ export const postJob = async (req, res) => {
       position,
       company: companyId,
       created_by: userId,
+      applicationLink: applicationLink || null, // store external apply link
     });
+
     res.status(201).json({
       message: "Job posted successfully.",
       job,
@@ -54,7 +58,7 @@ export const postJob = async (req, res) => {
   }
 };
 
-//Users
+//Users: get all jobs (internal + API jobs)
 export const getAllJobs = async (req, res) => {
   try {
     const keyword = req.query.keyword || "";
@@ -64,21 +68,36 @@ export const getAllJobs = async (req, res) => {
         { description: { $regex: keyword, $options: "i" } },
       ],
     };
+
     const jobs = await Job.find(query)
-      .populate({
-        path: "company",
-      })
+      .populate("company")
       .sort({ createdAt: -1 });
 
-    if (!jobs) {
+    if (!jobs || jobs.length === 0) {
       return res.status(404).json({ message: "No jobs found", status: false });
     }
-    return res.status(200).json({ jobs, status: true });
+
+    // Optional: Map to add a field if it's an API job
+    const formattedJobs = jobs.map((job) => ({
+      _id: job._id,
+      title: job.title,
+      description: job.description,
+      location: job.location,
+      jobType: job.jobType,
+      salary: job.salary,
+      company: job.company ? job.company.name : "External Company",
+      applicationLink: job.applicationLink || null, // external apply link
+      createdAt: job.createdAt,
+      isExternal: !!job.applicationLink, // true if API job
+    }));
+
+    return res.status(200).json({ jobs: formattedJobs, status: true });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Server Error", status: false });
   }
 };
+
 
 //Users
 export const getJobById = async (req, res) => {
