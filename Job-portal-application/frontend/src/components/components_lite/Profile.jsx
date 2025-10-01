@@ -78,7 +78,10 @@ const Profile = () => {
               {isResume ? (
                 <a
                   target="_blank"
-                  href={`${user?.profile?.resume.replace("/upload/", "/upload/fl_attachment:resume/")}`}
+                  href={user?.profile?.resume
+                    ? user.profile.resume.replace("/upload/", "/upload/fl_attachment:resume/")
+                    : "#"}
+
                   className="text-blue-600 hover:underline cursor-pointer"
                 >
                   Download {user?.profile?.resumeOriginalName}

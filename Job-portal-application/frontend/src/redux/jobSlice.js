@@ -14,7 +14,7 @@ const jobSlice = createSlice({
   initialState,
   reducers: {
     setAllJobs(state, action) {
-      state.allJobs = action.payload; // Update state with fetched jobs
+      state.allJobs = action.payload;   // Update state with fetched jobs
     },
     setSingleJob(state, action) {
       state.singleJob = action.payload; // Update state with fetched job details
