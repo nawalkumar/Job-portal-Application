@@ -21,6 +21,7 @@ import Creator from "./components/creator/Creator.jsx";
 
 const appRouter = createBrowserRouter([
   { path: "/", element: <Home /> },
+  { path: "*", element: <Home /> },
   {
     path: "/login",
     element: <Login />,
