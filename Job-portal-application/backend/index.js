@@ -32,13 +32,14 @@ const __dirname = path.dirname(__filename);
 
 // CORS settings
 const corsOptions = {
-  origin:
-    process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL]
-      : ["http://localhost:5173"],
+  origin: [
+    "http://localhost:5173",           // frontend in local
+    process.env.FRONTEND_URL           // frontend in production (vercel)
+  ],
   credentials: true,
 };
 app.use(cors(corsOptions));
+
 
 // API routes
 app.get("/api", (req, res) => res.send("Backend is running!"));
@@ -68,22 +69,22 @@ if (process.env.NODE_ENV !== "production") {
 }
 
 // Serve React frontend in production
-if (process.env.NODE_ENV === "production") {
-  const buildPath = path.join(__dirname, "../client/build");
-  app.use(express.static(buildPath));
+// if (process.env.NODE_ENV === "production") {
+//   const buildPath = path.join(__dirname, "../client/build");
+//   app.use(express.static(buildPath));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(buildPath, "index.html"));
-  });
-} else {
-  // Development: Serve Vite/React from frontend/dist
-  const frontendDist = path.join(path.resolve(), "frontend/dist");
-  app.use(express.static(frontendDist));
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.join(buildPath, "index.html"));
+//   });
+// } else {
+// Development: Serve Vite/React from frontend/dist
+// const frontendDist = path.join(path.resolve(), "frontend/dist");
+// app.use(express.static(frontendDist));
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(frontendDist, "index.html"));
-  });
-}
+// app.get("*", (req, res) => {
+//   res.sendFile(path.join(frontendDist, "index.html"));
+// });
+// }
 
 // Start server after DB connection
 const PORT = process.env.PORT || 5001;
