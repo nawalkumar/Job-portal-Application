@@ -164,24 +164,22 @@ export const getJobById = async (req, res) => {
 export const getAdminJobs = async (req, res) => {
   try {
     const adminId = req.id;
-    const jobs = await Job.find({ created_by: adminId }).populate({
-      path: "company",
-    });
 
-    if (!jobs?.length) {
+    const jobs = await Job.find({ created_by: adminId }).populate("company");
+
+    if (!jobs || jobs.length === 0) {
       return res
         .status(404)
         .json({ message: "No jobs found", status: false });
     }
 
     const formatted = jobs.map((job) => {
-      const companyName = job.company?.name || "Unknown Company";
-
       return {
         ...job.toObject(),
         description: sanitizeHTML(job.description),
-        companyLogo: job.companyLogo || null,
-        company: companyName, // ← Add company name
+        companyName: job.company?.name || "Unknown Company", // ✅ Only name
+        company: job.company || null, // ✅ Full company object
+        companyLogo: job.companyLogo || job.company?.logo || null,
       };
     });
 

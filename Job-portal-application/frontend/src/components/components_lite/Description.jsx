@@ -120,16 +120,27 @@ const Description = () => {
         </div>
 
         {/* Apply Button */}
+        {/* Apply Button or External Link */}
         <div>
           {singleJob.applicationLink ? (
-            <a
-              href={singleJob.applicationLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
+            <button
+              onClick={() => {
+                const isProfileComplete =
+                  user?.fullname &&
+                  user?.email &&
+                  user?.phoneNumber &&
+                  user?.profile?.resume;
+
+                if (!isProfileComplete) {
+                  toast.error("⚠ Complete your profile to apply externally.");
+                } else {
+                  window.open(singleJob.applicationLink, "_blank");
+                }
+              }}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
             >
               Apply Externally
-            </a>
+            </button>
           ) : (
             <Button
               onClick={isApplied ? null : applyJobHandler}
@@ -143,6 +154,7 @@ const Description = () => {
             </Button>
           )}
         </div>
+
       </div>
 
       {/* BADGES */}
