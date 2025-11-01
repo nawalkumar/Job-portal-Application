@@ -1,13 +1,25 @@
+// services/jobFetcher.js
 import axios from "axios";
 import mongoose from "mongoose";
 import { Job } from "../models/job.model.js";
 
-// Default values (replace with real IDs if available)
+// Helper: Generate 2-letter avatar
+const generateAvatar = (name) => {
+    if (!name) return "";
+    const words = name.trim().split(/\s+/);
+    const first = words[0][0] ?? "";
+    const second = words.length > 1 ? words[words.length - 1][0] : words[0][1] ?? "";
+    const text = (first + second).toUpperCase();
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(
+        text
+    )}&background=random&color=fff&size=128`;
+};
+
 const defaultCompanyId = new mongoose.Types.ObjectId();
 const defaultUserId = new mongoose.Types.ObjectId();
 
 /**
- * Save job to DB with duplicate check
+ * Save job with duplicate check
  */
 const saveJob = async (jobData) => {
     try {
@@ -19,14 +31,14 @@ const saveJob = async (jobData) => {
 
         if (!exists) {
             const savedJob = await Job.create(jobData);
-            console.log(`✅ Saved job: ${savedJob.title} (ID: ${savedJob._id})`);
-            return true; // job saved
+            console.log(`Saved job: ${savedJob.title} (ID: ${savedJob._id})`);
+            return true;
         } else {
-            console.log(`⚠️ Skipped duplicate: ${jobData.title}`);
-            return false; // duplicate
+            console.log(`Skipped duplicate: ${jobData.title}`);
+            return false;
         }
     } catch (err) {
-        console.error(`❌ Error saving job "${jobData.title}":`, err.message);
+        console.error(`Error saving job "${jobData.title}":`, err.message);
         return false;
     }
 };
@@ -36,7 +48,7 @@ const saveJob = async (jobData) => {
  */
 export const fetchAdzunaJobs = async () => {
     if (!process.env.ADZUNA_APP_ID || !process.env.ADZUNA_APP_KEY) {
-        console.warn("⚠️ Adzuna API keys missing in .env");
+        console.warn("Adzuna API keys missing in .env");
         return [];
     }
 
@@ -57,14 +69,17 @@ export const fetchAdzunaJobs = async () => {
 
         const jobs = res.data.results || [];
         console.log(`Adzuna API returned ${jobs.length} jobs`);
-        console.log("🔍 First Adzuna job:", jobs[0]?.title, "-", jobs[0]?.location?.display_name);
 
-        for (let job of jobs) {
+        for (const job of jobs) {
+            const companyName = job.company?.display_name ?? "Unknown Company";
+
             await saveJob({
                 title: job.title,
-                description: job.description || "Not provided",
+                description: `<p><strong>Company:</strong> ${companyName}</p>${job.description || "Not provided"}`,
                 requirements: job.category ? [job.category.label] : [],
-                salary: job.salary_min ? `${job.salary_min} - ${job.salary_max}` : "Not disclosed",
+                salary: job.salary_min
+                    ? `${job.salary_min} - ${job.salary_max}`
+                    : "Not disclosed",
                 experienceLevel: 1,
                 location: job.location?.display_name || "Remote",
                 jobType: job.contract_type || "Full-time",
@@ -72,12 +87,14 @@ export const fetchAdzunaJobs = async () => {
                 company: defaultCompanyId,
                 created_by: defaultUserId,
                 applications: [],
+                applicationLink: job.redirect_url || null,
+                companyLogo: job.company?.logo || generateAvatar(companyName),
             });
         }
 
-        return jobs; // return jobs for logging in scheduler
+        return jobs;
     } catch (err) {
-        console.error("❌ Error fetching Adzuna jobs:", err.message);
+        console.error("Error fetching Adzuna jobs:", err.message);
         return [];
     }
 };
@@ -87,25 +104,29 @@ export const fetchAdzunaJobs = async () => {
  */
 export const fetchJoobleJobs = async () => {
     if (!process.env.JOOBLE_KEY) {
-        console.warn("⚠️ Jooble API key missing in .env");
+        console.warn("Jooble API key missing in .env");
         return [];
     }
 
     try {
-        const res = await axios.post(`https://jooble.org/api/${process.env.JOOBLE_KEY}`, {
-            keywords: "developer",
-            location: "India",
-            page: 1,
-        });
+        const res = await axios.post(
+            `https://jooble.org/api/${process.env.JOOBLE_KEY}`,
+            {
+                keywords: "developer",
+                location: "India",
+                page: 1,
+            }
+        );
 
         const jobs = res.data.jobs || [];
         console.log(`Jooble API returned ${jobs.length} jobs`);
-        console.log("🔍 First Jooble job:", jobs[0]?.title, "-", jobs[0]?.location);
 
-        for (let job of jobs) {
+        for (const job of jobs) {
+            const companyName = job.company ?? "Unknown Company";
+
             await saveJob({
                 title: job.title,
-                description: job.snippet || "Not provided",
+                description: `<p><strong>Company:</strong> ${companyName}</p>${job.snippet || "Not provided"}`,
                 requirements: [],
                 salary: job.salary || "Not disclosed",
                 experienceLevel: 1,
@@ -115,12 +136,14 @@ export const fetchJoobleJobs = async () => {
                 company: defaultCompanyId,
                 created_by: defaultUserId,
                 applications: [],
+                applicationLink: job.link || null,
+                companyLogo: generateAvatar(companyName),
             });
         }
 
         return jobs;
     } catch (err) {
-        console.error("❌ Error fetching Jooble jobs:", err.message);
+        console.error("Error fetching Jooble jobs:", err.message);
         return [];
     }
 };

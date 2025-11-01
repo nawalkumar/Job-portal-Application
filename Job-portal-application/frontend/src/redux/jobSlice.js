@@ -1,39 +1,51 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  allJobs: [],
-  allAdminJobs: [], // This will hold
-  singleJob: null, // This will hold the job details when a user clicks on a job
-  searchJobByText: "",
-  allAppliedJobs: [], // This will hold
-  searchedQuery: "",
+  allJobs: [],           // All jobs (from API + admin) – used in Browse & LatestJobs
+  allAdminJobs: [],      // Jobs posted by logged-in admin
+  singleJob: null,       // Selected job details (for Description page)
+  searchJobByText: "",   // Search input text (for filtering)
+  allAppliedJobs: [],    // Jobs user has applied to
+  searchedQuery: "",     // Final query sent to backend (after debounce or enter)
 };
 
 const jobSlice = createSlice({
   name: "jobs",
   initialState,
   reducers: {
+    // Set all jobs from /get endpoint
     setAllJobs(state, action) {
-      state.allJobs = action.payload;   // Update state with fetched jobs
+      state.allJobs = action.payload;
     },
+
+    // Set single job when user clicks "Details"
     setSingleJob(state, action) {
-      state.singleJob = action.payload; // Update state with fetched job details
+      state.singleJob = action.payload;
     },
+
+    // Set jobs created by admin
     setAllAdminJobs(state, action) {
-      state.allAdminJobs = action.payload; // Update state with fetched admin jobs
+      state.allAdminJobs = action.payload;
     },
+
+    // Update search input as user types
     setSearchJobByText(state, action) {
       state.searchJobByText = action.payload;
     },
+
+    // Update applied jobs list
     setAllAppliedJobs(state, action) {
       state.allAppliedJobs = action.payload;
     },
+
+    // Final search query sent to API
     setSearchedQuery(state, action) {
       state.searchedQuery = action.payload;
     },
   },
 });
 
+// Export actions
 export const {
   setAllJobs,
   setSingleJob,
@@ -42,4 +54,6 @@ export const {
   setAllAppliedJobs,
   setSearchedQuery,
 } = jobSlice.actions;
+
+// Export reducer
 export default jobSlice.reducer;

@@ -35,7 +35,7 @@ const Navbar = () => {
     }
   };
   return (
-    <div className="bg-white">
+    <div className="bg-gray-700  shadow-md px-5">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
@@ -137,6 +137,7 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      <hr />
     </div>
   );
 };

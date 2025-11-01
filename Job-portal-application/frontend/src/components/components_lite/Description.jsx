@@ -1,3 +1,4 @@
+// components/Description.jsx
 import React, { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -18,11 +19,11 @@ const Description = () => {
   const [error, setError] = useState(null);
   const { user } = useSelector((store) => store.auth);
 
-  const isIntiallyApplied =
-    singleJob?.application?.some(
+  const isInitiallyApplied =
+    singleJob?.applications?.some(
       (application) => application.applicant === user?._id
     ) || false;
-  const [isApplied, setIsApplied] = useState(isIntiallyApplied);
+  const [isApplied, setIsApplied] = useState(isInitiallyApplied);
 
   const applyJobHandler = async () => {
     try {
@@ -32,139 +33,191 @@ const Description = () => {
       );
       if (res.data.success) {
         setIsApplied(true);
-        const updateSingleJob = {
+        const updatedJob = {
           ...singleJob,
           applications: [...singleJob.applications, { applicant: user?._id }],
         };
-        dispatch(setSingleJob(updateSingleJob));
-        console.log(res.data);
+        dispatch(setSingleJob(updatedJob));
         toast.success(res.data.message);
       }
     } catch (error) {
-      console.log(error.message);
-      toast.error(error.response.data.message);
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to apply");
     }
   };
 
   useEffect(() => {
-    const fetchSingleJobs = async () => {
+    const fetchSingleJob = async () => {
       setLoading(true);
       setError(null);
       try {
         const res = await axios.get(`${JOB_API_ENDPOINT}/get/${jobId}`, {
           withCredentials: true,
         });
-        console.log("API Response:", res.data);
-        if (res.data.status) {
+
+        if (res.data.status && res.data.job) {
           dispatch(setSingleJob(res.data.job));
           setIsApplied(
-            res.data.job.applications.some(
-              (application) => application.applicant === user?._id
-            )
+            res.data.job.applications?.some(
+              (app) => app.applicant === user?._id
+            ) || false
           );
         } else {
-          setError("Failed to fetch jobs.");
+          setError("Job not found.");
         }
       } catch (error) {
         console.error("Fetch Error:", error);
-        setError(error.message || "An error occurred.");
+        setError("Failed to load job.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSingleJobs();
+    fetchSingleJob();
   }, [jobId, dispatch, user?._id]);
-  console.log("single jobs", singleJob);
 
-  if (!singleJob) {
-    return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      </div>
+    );
+  }
+
+  if (error || !singleJob) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-600">{error || "Job not found"}</p>
+      </div>
+    );
   }
 
   return (
-    <div>
-      <div className="max-w-7xl mx-auto my-10 ">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="font-bold text-xl ">{singleJob?.title}</h1>
-            <div className=" flex gap-2 items-center mt-4 ">
-              <Badge className={" text-blue-600 font-bold"} variant={"ghost"}>
-                {singleJob?.position} Open Positions
-              </Badge>
-              <Badge className={" text-[#FA4F09] font-bold"} variant={"ghost"}>
-                {singleJob?.salary}LPA
-              </Badge>
-              <Badge className={" text-[#6B3AC2]  font-bold"} variant={"ghost"}>
-                {singleJob?.location}
-              </Badge>
-              <Badge className={" text-black font-bold"} variant={"ghost"}>
-                {singleJob?.jobType}
-              </Badge>
+    <div className="max-w-7xl mx-auto my-10 p-6 bg-white rounded-xl shadow-lg">
+      {/* HEADER: Logo + Title + Company */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-5">
+          {/* Company Logo */}
+          {singleJob.companyLogo ? (
+            <img
+              src={singleJob.companyLogo}
+              alt={singleJob.company}
+              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+            />
+          ) : (
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+              {singleJob.company?.[0] || "C"}
             </div>
-          </div>
+          )}
+
+          {/* Title + Company */}
           <div>
+            <h1 className="text-3xl font-bold text-gray-900">{singleJob.title}</h1>
+            <p className="text-xl text-indigo-600 font-semibold mt-1">
+              {singleJob.company}
+            </p>
+          </div>
+        </div>
+
+        {/* Apply Button */}
+        <div>
+          {singleJob.applicationLink ? (
+            <a
+              href={singleJob.applicationLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
+            >
+              Apply Externally
+            </a>
+          ) : (
             <Button
               onClick={isApplied ? null : applyJobHandler}
               disabled={isApplied}
-              className={`rounded-lg ${
-                isApplied
-                  ? "bg-gray-600 cursor-not-allowed"
-                  : "bg-[#6B3AC2] hover:bg-[#552d9b]"
-              }`}
+              className={`px-8 py-3 rounded-full font-bold text-lg transition ${isApplied
+                ? "bg-gray-500 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700"
+                }`}
             >
-              {isApplied ? "Already Applied" : "Apply"}
+              {isApplied ? "Already Applied" : "Apply Now"}
             </Button>
-          </div>
-        </div>
-        <h1 className="border-b-2 border-b-gray-400 font-medium py-4">
-          {singleJob?.description}
-        </h1>
-        <div className="my-4">
-          <h1 className="font-bold my-1 ">
-            Role:{" "}
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.position} Open Positions
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Location:{" "}
-            <span className=" pl-4 font-normal text-gray-800">
-              {" "}
-              {singleJob?.location}
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Salary:{" "}
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.salary} LPA
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Experience:{" "}
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.experienceLevel} Year
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Total Applicants:{" "}
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.applications?.length}
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Job Type:
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.jobType}
-            </span>
-          </h1>
-          <h1 className="font-bold my-1 ">
-            Post Date:
-            <span className=" pl-4 font-normal text-gray-800">
-              {singleJob?.createdAt.split("T")[0]}
-            </span>
-          </h1>
+          )}
         </div>
       </div>
+
+      {/* BADGES */}
+      <div className="flex flex-wrap gap-3 mb-6">
+        <Badge className="text-blue-700 bg-blue-50 px-4 py-1 text-sm font-medium">
+          {singleJob.position} Positions
+        </Badge>
+        <Badge className="text-red-700 bg-red-50 px-4 py-1 text-sm font-medium">
+          {singleJob.salary} LPA
+        </Badge>
+        <Badge className="text-purple-700 bg-purple-50 px-4 py-1 text-sm font-medium">
+          {singleJob.location}
+        </Badge>
+        <Badge className="text-gray-700 bg-gray-100 px-4 py-1 text-sm font-medium">
+          {singleJob.jobType}
+        </Badge>
+      </div>
+
+      {/* FULL DESCRIPTION WITH HTML */}
+      <div className="mt-10">
+        <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-gray-200 pb-3">
+          Job Description
+        </h2>
+
+        <div
+          className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-4"
+          dangerouslySetInnerHTML={{
+            __html: singleJob.description || "<p>No description available.</p>",
+          }}
+        />
+      </div>
+
+      {/* JOB DETAILS GRID */}
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+        <div>
+          <p className="font-semibold text-lg">
+            Role:{" "}
+            <span className="font-normal">{singleJob.position} Open Positions</span>
+          </p>
+          <p className="font-semibold text-lg mt-3">
+            Location: <span className="font-normal">{singleJob.location}</span>
+          </p>
+          <p className="font-semibold text-lg mt-3">
+            Salary: <span className="font-normal">{singleJob.salary} LPA</span>
+          </p>
+          <p className="font-semibold text-lg mt-3">
+            Experience: <span className="font-normal">{singleJob.experienceLevel} Year(s)</span>
+          </p>
+        </div>
+        <div>
+          <p className="font-semibold text-lg">
+            Total Applicants:{" "}
+            <span className="font-normal">{singleJob.applications?.length || 0}</span>
+          </p>
+          <p className="font-semibold text-lg mt-3">
+            Job Type: <span className="font-normal">{singleJob.jobType}</span>
+          </p>
+          <p className="font-semibold text-lg mt-3">
+            Posted On:{" "}
+            <span className="font-normal">
+              {new Date(singleJob.createdAt).toLocaleDateString()}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      {/* DEBUG: Remove in production */}
+      {process.env.NODE_ENV === "development" && (
+        <details className="mt-8 text-xs text-gray-500">
+          <summary>Debug: Raw HTML</summary>
+          <pre className="bg-gray-100 p-3 rounded mt-2 text-xs overflow-auto">
+            {singleJob.description}
+          </pre>
+        </details>
+      )}
     </div>
   );
 };

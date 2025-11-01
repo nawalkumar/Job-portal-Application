@@ -17,7 +17,7 @@ const Header = () => {
   };
   return (
     <div>
-      <div className="text-center">
+      <div className="text-center bg-gray-700 py-20 px-5">
         <div className="flex flex-col gap-5 my-10">
           <span className="px-4 mx-auto flex justify-center items-center py-2 gap-2 rounded-full bg-gray-200 text-red-600 font-medium">
             <span className="text-[#614232]">
@@ -36,14 +36,17 @@ const Header = () => {
             from here in your <br />
             selected areas conveniently and get hired quickly.
           </p>
-          <div className="flex w-[40%] shadow-lg border border-gray-300 pl-3 rounded-full  items-center gap-4 mx-auto ">
+          <div className="flex w-[40%] shadow-lg border border-gray-300 pl-3 rounded-full  items-center px-1 mx-auto">
             <input
               type="text"
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Find Your Dream Job"
-              className="outline-none border-none w-full"
+              className="outline-none border-none w-full text-black py-2 pl-4 pr-2 bg-transparent"
             />
-            <Button onClick={searchjobHandler} className=" rounded-r-full">
+            <Button
+              onClick={searchjobHandler}
+              className="rounded-r-lg rounded h-full flex items-center justify-center px-3 bg-inherit hover:bg-gray-700"
+            >
               <Search className="h-5 w-5" />
             </Button>
           </div>

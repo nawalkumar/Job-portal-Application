@@ -3,25 +3,31 @@ import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
-    <div>
-      {/* Footer for the current page */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "20px",
-          backgroundColor: "#f1f1f1",
-        }}
-      >
-        <p>© 2025 job portal. All rights reserved.</p>
-        <p>
-          Powered by <a href="https://github.com/ankitpathak62">Naval Kumar</a>
+    <footer className="bg-gray-700 text-gray-300 py-8">
+      <div className="max-w-7xl mx-auto px-4 text-center">
+        <p className="text-sm">© 2025 Job Portal. All rights reserved.</p>
+        <p className="text-sm mt-2">
+          Powered by{" "}
+          <a
+            href="https://github.com/nawalkumar/Job-portal-Application/blob/main/Job-portal-application/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-white hover:underline"
+          >
+            Naval Kumar
+          </a>
         </p>
-        <p>
-          <Link to={"/PrivacyPolicy"}>Privacy Policy </Link> |
-          <Link to={"/TermsofService"}> Terms of Service</Link>
+        <p className="text-sm mt-2">
+          <Link to="/PrivacyPolicy" className="hover:underline">
+            Privacy Policy
+          </Link>{" "}
+          |{" "}
+          <Link to="/TermsofService" className="hover:underline">
+            Terms of Service
+          </Link>
         </p>
       </div>
-    </div>
+    </footer>
   );
 };
 

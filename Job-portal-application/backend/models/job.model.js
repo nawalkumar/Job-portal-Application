@@ -1,3 +1,4 @@
+// models/job.model.js
 import mongoose from "mongoose";
 
 const jobSchema = new mongoose.Schema(
@@ -51,10 +52,15 @@ const jobSchema = new mongoose.Schema(
         ref: "Application",
       },
     ],
-    // New field for external or internal application link
+    // External application link (from API)
     applicationLink: {
       type: String,
-      required: false, // optional if some jobs don't have a direct link
+      required: false,
+    },
+    // Company logo (real or fallback avatar)
+    companyLogo: {
+      type: String,
+      required: false,
     },
   },
   { timestamps: true }
