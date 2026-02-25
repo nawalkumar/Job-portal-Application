@@ -30,14 +30,18 @@ app.use(cookieParser());
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// CORS settings
 const corsOptions = {
   origin: [
-    "http://localhost:5173",           // frontend in local
-    process.env.FRONTEND_URL           // frontend in production (vercel)
+    "http://localhost:5173",                              // local dev (Vite)
+    "http://localhost:3000",                              // if you use CRA sometimes
+    "https://job-portal-application-ot68.vercel.app",     // ← YOUR REAL VERCEL URL
+    "https://job-portal-application-ot68.vercel.app/",
   ],
-  credentials: true,
+  credentials: true,                                      // very important for cookies/JWT
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
+
 app.use(cors(corsOptions));
 
 
