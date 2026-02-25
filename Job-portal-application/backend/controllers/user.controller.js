@@ -5,54 +5,50 @@ import getDataUri from "../utils/datauri.js";
 import cloudinary from "../utils/cloud.js";
 
 export const register = async (req, res) => {
+  console.log("=== REGISTER ENDPOINT HIT ===");
+  console.log("Body received:", req.body);
+  console.log("File received:", req.file ? req.file.originalname : "NO FILE");
+
   try {
-    const { fullname, email, phoneNumber, password, adharcard, pancard, role } = req.body;
+    const { fullname, email, phoneNumber, password, adharcard, pancard, role } = req.body || {};
 
-    if (!fullname || !email || !phoneNumber || !password || !role || !pancard || !adharcard) {
+    if (!fullname || !email || !phoneNumber || !password || !role || !adharcard || !pancard) {
       return res.status(400).json({
-        message: "Missing required fields",
+        message: "All fields are required",
         success: false,
       });
     }
 
-    const user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({
-        message: "Email already exists",
-        success: false,
-      });
-    }
+    // Check duplicates
+    const existingUser = await User.findOne({ email });
+    if (existingUser) return res.status(400).json({ message: "Email already exists", success: false });
 
-    const existingAdharcard = await User.findOne({ adharcard });
-    if (existingAdharcard) {
-      return res.status(400).json({
-        message: "Adhar number already exists",
-        success: false,
-      });
-    }
+    const existingAdhar = await User.findOne({ adharcard });
+    if (existingAdhar) return res.status(400).json({ message: "Aadhaar already exists", success: false });
 
-    const existingPancard = await User.findOne({ pancard });
-    if (existingPancard) {
-      return res.status(400).json({
-        message: "Pan number already exists",
-        success: false,
-      });
-    }
+    const existingPan = await User.findOne({ pancard });
+    if (existingPan) return res.status(400).json({ message: "PAN already exists", success: false });
 
-    const file = req.file;
-    if (!file) {
-      return res.status(400).json({
-        message: "Profile image is required",
-        success: false,
-      });
+    // File upload — make it OPTIONAL for testing
+    let profilePhotoUrl = null;
+    if (req.file) {
+      console.log("Uploading file to Cloudinary...");
+      try {
+        const fileUri = getDataUri(req.file);
+        const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
+        profilePhotoUrl = cloudResponse.secure_url;
+        console.log("Cloudinary success:", profilePhotoUrl);
+      } catch (cloudErr) {
+        console.error("Cloudinary FAILED:", cloudErr.message);
+        // Continue without photo — don't crash
+      }
+    } else {
+      console.log("No profile photo uploaded — continuing without it");
     }
-
-    const fileUri = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const newUser = new User({
+    const newUser = await User.create({
       fullname,
       email,
       phoneNumber,
@@ -61,25 +57,26 @@ export const register = async (req, res) => {
       password: hashedPassword,
       role,
       profile: {
-        profilePhoto: cloudResponse.secure_url,
+        profilePhoto: profilePhotoUrl,
       },
     });
 
-    await newUser.save();
+    console.log("User created successfully:", newUser.email);
 
     return res.status(201).json({
       message: `Account created successfully for ${fullname}`,
       success: true,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      message: "Server Error registering user",
+    console.error("REGISTER CRASH:", error.message);
+    console.error(error.stack);
+    return res.status(500).json({
+      message: "Server error during registration",
+      error: error.message,  // ← send error message to frontend for debugging
       success: false,
     });
   }
 };
-
 export const login = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -173,7 +170,7 @@ export const updateProfile = async (req, res) => {
     const { fullname, email, phoneNumber, bio, skills } = req.body;
     const file = req.file;
 
-    const userId = req.id; // Assuming authentication middleware sets req.id
+    const userId = req.id;
     const user = await User.findById(userId);
 
     if (!user) {
