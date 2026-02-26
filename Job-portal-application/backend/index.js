@@ -33,7 +33,7 @@ const __dirname = path.dirname(__filename);
 const corsOptions = {
   origin: [
     "http://localhost:5173",                              // local dev (Vite)
-    "http://localhost:3000",                              // if you use CRA sometimes
+    "http://localhost:5011",                              // if you use CRA sometimes
     "https://job-portal-application-ot68.vercel.app",     // ← YOUR REAL VERCEL URL
     "https://job-portal-application-ot68.vercel.app/",
   ],
