@@ -5,10 +5,12 @@ import App from "./App.jsx";
 import { Toaster } from "./components/ui/sonner";
 import { Provider } from "react-redux";
 import { persistStore } from "redux-persist";
+import axios from "axios";
+
 
 import store from "./redux/store";
 import { PersistGate } from "redux-persist/integration/react";
-
+axios.defaults.withCredentials = true;
 const persistor = persistStore(store);
 
 createRoot(document.getElementById("root")).render(
