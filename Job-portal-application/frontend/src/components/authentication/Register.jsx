@@ -23,13 +23,15 @@ const Register = () => {
   });
 
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
-  const { loading } = useSelector((store) => store.auth);
+  // Get both loading and user from store
+  const { loading, user } = useSelector((store) => store.auth);
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+  
   const ChangeFilehandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
   };
@@ -47,6 +49,7 @@ const Register = () => {
     if (input.file) {
       formData.append("file", input.file);
     }
+    
     try {
       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_ENDPOINT}/register`, formData, {
@@ -68,15 +71,20 @@ const Register = () => {
     }
   };
 
-  const { user } = useSelector((store) => store.auth);
+  // --- SAFETY FIX START ---
   useEffect(() => {
+    // When the page loads, force loading to false so the button shows up.
+    dispatch(setLoading(false)); 
+    
     if (user) {
       navigate("/");
     }
-  }, []);
+  }, [user, navigate, dispatch]); 
+  // --- SAFETY FIX END ---
+
   return (
     <div>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="flex items-center justify-center max-w-7xl mx-auto">
         <form
           onSubmit={submitHandler}
@@ -93,7 +101,7 @@ const Register = () => {
               name="fullname"
               onChange={changeEventHandler}
               placeholder="John Doe"
-            ></Input>
+            />
           </div>
           <div className="my-2">
             <Label>Email</Label>
@@ -103,7 +111,7 @@ const Register = () => {
               name="email"
               onChange={changeEventHandler}
               placeholder="johndoe@gmail.com"
-            ></Input>
+            />
           </div>
           <div className="my-2">
             <Label>Password</Label>
@@ -113,7 +121,7 @@ const Register = () => {
               name="password"
               onChange={changeEventHandler}
               placeholder="********"
-            ></Input>
+            />
           </div>
           <div>
             <Label>PAN Card Number</Label>
@@ -123,7 +131,7 @@ const Register = () => {
               name="pancard"
               onChange={changeEventHandler}
               placeholder="ABCDEF1234G"
-            ></Input>
+            />
           </div>
           <div>
             <Label>Adhar Card Number</Label>
@@ -133,7 +141,7 @@ const Register = () => {
               name="adharcard"
               onChange={changeEventHandler}
               placeholder="123456789012"
-            ></Input>
+            />
           </div>
           <div className="my-2">
             <Label>Phone Number</Label>
@@ -143,7 +151,7 @@ const Register = () => {
               name="phoneNumber"
               onChange={changeEventHandler}
               placeholder="+1234567890"
-            ></Input>
+            />
           </div>
           <div className="flex items-center justify-between">
             <RadioGroup className="flex items-center gap-4 my-5 ">
@@ -180,22 +188,22 @@ const Register = () => {
               className="cursor-pointer"
             />
           </div>
+
           {loading ? (
             <div className="flex items-center justify-center my-10">
-              <div className="spinner-border text-blue-600" role="status">
-                <span className="sr-only">Loading...</span>
-              </div>
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+              <span className="ml-2">Processing...</span>
             </div>
           ) : (
             <button
               type="submit"
-              className="block w-full py-3 my-3 text-white bg-primary hover:bg-primary/90 rounded-md"
+              className="block w-full py-3 my-3 text-white bg-blue-600 hover:bg-blue-700 rounded-md transition-colors"
             >
               Register
             </button>
           )}
 
-          <p className="text-gray-500 text-md my-2">
+          <p className="text-gray-500 text-md my-2 text-center">
             Already have an account?{" "}
             <Link to="/login" className="text-blue-700 font-semibold">
               Login
