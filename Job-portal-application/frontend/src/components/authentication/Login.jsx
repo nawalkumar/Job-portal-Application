@@ -2,9 +2,8 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components_lite/Navbar";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { RadioGroup } from "../ui/radio-group";
-import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "sonner";
 import { USER_API_ENDPOINT } from "@/utils/data.js";
@@ -18,6 +17,7 @@ const Login = () => {
     password: "",
     role: "",
   });
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, user } = useSelector((store) => store.auth);
@@ -34,10 +34,11 @@ const Login = () => {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
       });
+
       if (res.data.success) {
         dispatch(setUser(res.data.user));
-        navigate("/");
         toast.success(res.data.message);
+        navigate("/");
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
@@ -46,11 +47,13 @@ const Login = () => {
     }
   };
 
+  // Ensure loading is false when component mounts to prevent "stuck" buttons
   useEffect(() => {
+    dispatch(setLoading(false));
     if (user) {
       navigate("/");
     }
-  }, []);
+  }, [user, navigate, dispatch]);
 
   return (
     <div className="bg-white min-h-screen">

@@ -30,6 +30,7 @@ const Register = () => {
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
+
   const ChangeFilehandler = (e) => {
     setInput({ ...input, file: e.target.files?.[0] });
   };
@@ -47,6 +48,7 @@ const Register = () => {
     if (input.file) {
       formData.append("file", input.file);
     }
+
     try {
       dispatch(setLoading(true));
       const res = await axios.post(`${USER_API_ENDPOINT}/register`, formData, {
