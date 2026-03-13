@@ -21,7 +21,7 @@ const JobCards = ({ job }) => {
     <div
       onClick={() => navigate(`/description/${job._id}`)}
       className="p-5 rounded-xl bg-white border border-gray-200 cursor-pointer 
-                 hover:shadow-2xl hover:shadow-blue-100 hover:border-blue-300 
+                 hover:shadow-2xl hover:shadow-emerald-100 hover:border-emerald-300 
                  transition-all duration-300 group"
     >
       {/* Logo + Company */}
@@ -30,10 +30,10 @@ const JobCards = ({ job }) => {
           <img
             src={job.companyLogo}
             alt={job.company}
-            className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 group-hover:border-blue-400 transition"
+            className="w-12 h-12 rounded-full object-cover border-2 border-gray-200 group-hover:border-emerald-400 transition"
           />
         ) : (
-          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
+          <div className="w-12 h-12 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white font-bold text-sm">
             {getInitials(job.company)}
           </div>
         )}
@@ -46,7 +46,7 @@ const JobCards = ({ job }) => {
       </div>
 
       {/* Title */}
-      <h2 className="font-bold text-xl text-gray-900 my-2 line-clamp-1 group-hover:text-blue-600 transition">
+      <h2 className="font-bold text-xl text-gray-900 my-2 line-clamp-1 group-hover:text-emerald-600 transition">
         {job.title}
       </h2>
 
@@ -60,18 +60,18 @@ const JobCards = ({ job }) => {
         />
       </div>
 
-      {/* Badges */}
+      {/* Badges - Using variants defined in your global badge.jsx */}
       <div className="flex flex-wrap gap-2 mt-4">
-        <Badge className="text-blue-700 bg-blue-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="secondary" className="px-3 py-1 text-xs font-medium">
           {job.position} Position{job.position > 1 ? "s" : ""}
         </Badge>
-        <Badge className="text-red-700 bg-red-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="destructive" className="bg-red-50 text-red-700 border-none px-3 py-1 text-xs font-medium hover:bg-red-100">
           {job.salary} LPA
         </Badge>
-        <Badge className="text-purple-700 bg-purple-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="outline" className="px-3 py-1 text-xs font-medium">
           {job.location}
         </Badge>
-        <Badge className="text-gray-700 bg-gray-100 px-3 py-1 text-xs font-medium">
+        <Badge variant="secondary" className="bg-gray-100 text-gray-700 hover:bg-gray-200 px-3 py-1 text-xs font-medium border-none">
           {job.jobType}
         </Badge>
       </div>
@@ -86,7 +86,7 @@ const JobCards = ({ job }) => {
             onClick={(e) => e.stopPropagation()} // Prevent navigate on click
             className="block"
           >
-            <Button className="w-full bg-gray-700 hover:bg-gray-900 text-white font-medium text-sm py-2">
+            <Button className="w-full font-medium text-sm py-2">
               Apply Now
             </Button>
           </a>

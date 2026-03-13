@@ -4,13 +4,11 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useSelector } from "react-redux";
-import store from "@/redux/store";
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
@@ -18,9 +16,7 @@ import axios from "axios";
 import { JOB_API_ENDPOINT } from "@/utils/data";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
-import { Loader2 } from "lucide-react";
-
-const companyArray = [];
+import { Loader2, Briefcase } from "lucide-react";
 
 const PostJob = () => {
   const [input, setInput] = useState({
@@ -34,12 +30,14 @@ const PostJob = () => {
     position: 0,
     companyId: "",
   });
+
   const navigate = useNavigate();
   const { companies } = useSelector((store) => store.company);
+  const [loading, setLoading] = useState(false);
+
   const changeEventHandler = (e) => {
     setInput({ ...input, [e.target.name]: e.target.value });
   };
-  const [loading, setLoading] = useState(false);
 
   const selectChangeHandler = (value) => {
     const selectedCompany = companies.find(
@@ -63,123 +61,128 @@ const PostJob = () => {
         navigate("/admin/jobs");
       } else {
         toast.error(res.data.message);
-        navigate("/admin/jobs");
       }
     } catch (error) {
-      if (error.response && error.response.data) {
-        toast.error(error.response.data.message || "Something went wrong");
-      } else {
-        toast.error("An unexpected error occurred");
-      }
-      
+      const errorMessage = error.response?.data?.message || "An unexpected error occurred";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="flex items-center justify-center w-screen my-5">
+      <div className="flex items-center justify-center w-screen py-10 px-4">
         <form
           onSubmit={submitHandler}
-          className="p-8 max-w-4xl border border-gray-500 shadow-sm hover:shadow-xl hover:shadow-red-300 rounded-lg"
+          className="p-8 max-w-4xl w-full bg-white border border-gray-200 shadow-sm rounded-2xl"
         >
-          <div className="grid grid-cols-2 gap-5">
+          <div className="flex items-center gap-3 mb-8 border-b pb-4">
+            <div className="p-2 bg-emerald-100 rounded-lg">
+              <Briefcase className="text-emerald-600 w-6 h-6" />
+            </div>
             <div>
-              <Label>Title</Label>
+              <h1 className="font-bold text-2xl text-gray-900">Post New Job</h1>
+              <p className="text-sm text-gray-500">Fill in the details to list a new opportunity</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Job Title</Label>
               <Input
                 type="text"
                 name="title"
                 value={input.title}
-                placeholder="Enter job title"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="e.g. Senior Frontend Developer"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Description</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Description</Label>
               <Input
                 name="description"
                 value={input.description}
-                placeholder="Enter job description"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400 "
+                placeholder="Briefly describe the role"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Location</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Location</Label>
               <Input
                 type="text"
                 name="location"
                 value={input.location}
-                placeholder="Enter job location"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="e.g. Remote, Mumbai"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Salary</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Salary (LPA)</Label>
               <Input
                 type="number"
                 name="salary"
                 value={input.salary}
-                placeholder="Enter job salary"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="Enter annual salary"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Position</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">No. of Positions</Label>
               <Input
                 type="number"
                 name="position"
                 value={input.position}
-                placeholder="Enter job position"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="Number of openings"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Requirements</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Requirements</Label>
               <Input
                 type="text"
                 name="requirements"
                 value={input.requirements}
-                placeholder="Enter job requirements"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="Skills (comma separated)"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-
-            <div>
-              <Label>Experience</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Experience Level (Years)</Label>
               <Input
                 type="number"
                 name="experience"
                 value={input.experience}
-                placeholder="Enter job experience"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="Years required"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
-            <div>
-              <Label>Job Type</Label>
+            <div className="space-y-1">
+              <Label className="font-semibold text-gray-700">Job Type</Label>
               <Input
                 type="text"
                 name="jobType"
                 value={input.jobType}
-                placeholder="Enter job type"
-                className="focus-visible:ring-offset-0 focus-visible:ring-0 my-1 hover:shadow-blue-400"
+                placeholder="e.g. Full-time, Contract"
+                className="focus-visible:ring-emerald-500 border-gray-300"
                 onChange={changeEventHandler}
               />
             </div>
 
-            <div>
-              {companies.length > 0 && (
+            <div className="col-span-full md:col-span-1 pt-2">
+              <Label className="font-semibold text-gray-700">Select Company</Label>
+              {companies.length > 0 ? (
                 <Select onValueChange={selectChangeHandler}>
-                  <SelectTrigger className="w-[180px]">
-                    <SelectValue placeholder="Select a Company" />
+                  <SelectTrigger className="w-full border-gray-300 focus:ring-emerald-500">
+                    <SelectValue placeholder="Which company?" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
@@ -194,29 +197,29 @@ const PostJob = () => {
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+              ) : (
+                <div className="text-sm text-red-500 font-medium py-2">
+                  *No companies registered. Please create one first.*
+                </div>
               )}
             </div>
           </div>
-          <div className="flex items-center justify-center mt-5">
+
+          <div className="mt-8">
             {loading ? (
-              <Button className="w-full px-4 py-2 text-sm text-white bg-black rounded-md ">
-                {" "}
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+              <Button disabled className="w-full py-6 bg-emerald-600 text-white rounded-xl">
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Please wait
               </Button>
             ) : (
               <Button
                 type="submit"
-                className="w-full px-4 py-2 text-sm text-white bg-black rounded-md hover:bg-blue-600"
+                disabled={companies.length === 0}
+                className="w-full py-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-bold transition-all shadow-lg shadow-emerald-100 active:scale-[0.98]"
               >
-                Post Job
+                Create Job Listing
               </Button>
             )}
           </div>
-          {companies.length === 0 && (
-            <p className="text-sm font-bold my-3 text-center text-red-600">
-              *Please register a company to post jobs.*
-            </p>
-          )}
         </form>
       </div>
     </div>

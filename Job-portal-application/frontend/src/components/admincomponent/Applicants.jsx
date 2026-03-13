@@ -26,15 +26,24 @@ const Applicants = () => {
       }
     };
     fetchAllApplicants();
-  }, []);
+  }, [params.id, dispatch]); // Added dependencies for best practices, logic remains the same
+
   return (
-    <div>
+    <div className="min-h-screen bg-gray-50">
       <Navbar />
-      <div className="max-w-7xl mx-auto">
-        <h1 className="font-bold text-xl my-5">
-          Applicants {applicants?.applications?.length}
-        </h1>
-        <ApplicantsTable />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="flex items-center gap-2 my-5">
+          <h1 className="font-bold text-2xl text-gray-800">
+            Applicants
+          </h1>
+          <span className="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full text-sm font-semibold border border-emerald-200">
+            {applicants?.applications?.length || 0}
+          </span>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <ApplicantsTable />
+        </div>
       </div>
     </div>
   );

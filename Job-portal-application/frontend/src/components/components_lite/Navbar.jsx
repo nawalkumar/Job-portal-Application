@@ -37,12 +37,12 @@ const Navbar = () => {
   };
 
   return (
-    <div className="bg-gray-700 shadow-md px-5">
+    <div className="bg-emerald-600 text-white shadow-md px-5">
       <div className="flex items-center justify-between mx-auto max-w-7xl h-16">
         <div>
           <h1 className="text-2xl font-bold">
-            <span className="text-[#6B3AC2]"> Job </span>{" "}
-            <span className="text-[#FA4F09]">Portal</span>
+            <span className="text-white">Job </span>
+            <span className="text-lime-400">Portal</span>
           </h1>
         </div>
 
@@ -80,8 +80,9 @@ const Navbar = () => {
               <Link to="/login">
                 <Button variant="outline">Login</Button>
               </Link>
+
               <Link to="/register">
-                <Button className="bg-red-600 hover:bg-red-700">
+                <Button className="bg-emerald-700 hover:bg-emerald-600 text-white">
                   Register
                 </Button>
               </Link>

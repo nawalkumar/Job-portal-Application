@@ -31,37 +31,38 @@ const Job1 = ({ job }) => {
     <div
       onClick={() => navigate(`/description/${job._id}`)}
       className="p-5 rounded-xl bg-white border border-gray-200 cursor-pointer 
-                 hover:shadow-xl hover:border-indigo-300 transition-all duration-300 group"
+                 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 group"
     >
       {/* Header: Time + Bookmark */}
       <div className="flex justify-between items-center mb-3">
-        <p className="text-xs text-gray-500">{daysAgo(job.createdAt)}</p>
+        <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
         <Button
           variant="ghost"
           size="icon"
-          className="rounded-full"
+          className="rounded-full hover:bg-emerald-50"
           onClick={(e) => {
             e.stopPropagation();
             setIsBookmarked(!isBookmarked);
           }}
         >
           {isBookmarked ? (
-            <BookmarkCheck className="h-4 w-4 text-indigo-600" />
+            <BookmarkCheck className="h-4 w-4 text-emerald-600" />
           ) : (
-            <Bookmark className="h-4 w-4 text-gray-500" />
+            <Bookmark className="h-4 w-4 text-gray-400" />
           )}
         </Button>
       </div>
 
       {/* Logo + Company */}
       <div className="flex items-center gap-3 mb-3">
-        <Avatar className="h-12 w-12">
+        <Avatar className="h-12 w-12 border border-gray-100 shadow-sm">
           <AvatarImage
             src={job.companyLogo}
             alt={job.company}
             className="object-cover"
           />
-          <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold">
+          {/* Your AvatarFallback already defaults to Emerald in ui/avatar.jsx */}
+          <AvatarFallback>
             {getInitials(job.company)}
           </AvatarFallback>
         </Avatar>
@@ -69,42 +70,42 @@ const Job1 = ({ job }) => {
           <h3 className="font-semibold text-lg text-gray-800 line-clamp-1">
             {job.company}
           </h3>
-          <p className="text-xs text-gray-500">India</p>
+          <p className="text-xs text-gray-500 font-medium">India</p>
         </div>
       </div>
 
       {/* Title */}
-      <h2 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-indigo-600 transition">
+      <h2 className="font-bold text-xl text-gray-900 mb-2 group-hover:text-emerald-600 transition">
         {job.title}
       </h2>
 
-      {/* Description with HTML */}
+      {/* Description */}
       <div className="mb-4">
         <div
-          className="prose prose-sm max-w-none text-gray-600 line-clamp-3 leading-snug"
+          className="prose prose-sm max-w-none text-gray-600 line-clamp-2 leading-relaxed"
           dangerouslySetInnerHTML={{
-            __html: job.description || "No description.",
+            __html: job.description || "No description available.",
           }}
         />
       </div>
 
-      {/* Badges */}
+      {/* Badges - using the updated variants from your ui/badge.jsx */}
       <div className="flex flex-wrap gap-2 mb-4">
-        <Badge className="text-blue-700 bg-blue-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="secondary" className="px-3 py-1 text-xs">
           {job.position} Position{job.position > 1 ? "s" : ""}
         </Badge>
-        <Badge className="text-red-700 bg-red-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="destructive" className="bg-red-50 text-red-600 border-none px-3 py-1 text-xs">
           {job.salary} LPA
         </Badge>
-        <Badge className="text-purple-700 bg-purple-50 px-3 py-1 text-xs font-medium">
+        <Badge variant="outline" className="px-3 py-1 text-xs">
           {job.location}
         </Badge>
-        <Badge className="text-gray-700 bg-gray-100 px-3 py-1 text-xs font-medium">
+        <Badge variant="secondary" className="bg-gray-100 text-gray-600 border-none px-3 py-1 text-xs">
           {job.jobType}
         </Badge>
       </div>
 
-      {/* Apply Button (External) */}
+      {/* Apply Button */}
       {job.applicationLink && (
         <a
           href={job.applicationLink}
@@ -113,7 +114,8 @@ const Job1 = ({ job }) => {
           onClick={(e) => e.stopPropagation()}
           className="block mt-2"
         >
-          <Button className="w-full bg-green-600 hover:bg-green-700 text-white font-medium text-sm">
+          {/* Button already defaults to Emerald in ui/button.jsx */}
+          <Button className="w-full font-medium text-sm">
             Apply Externally
           </Button>
         </a>

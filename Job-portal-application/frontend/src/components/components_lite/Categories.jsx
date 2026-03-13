@@ -38,32 +38,31 @@ const Categories = () => {
     navigate("/browse");
   };
 
-  // Autoplay plugin — continuous left-to-right movement
   const plugin = React.useRef(
     Autoplay({
-      delay: 2500,                  // slide change every 2.5 seconds
-      stopOnInteraction: false,     // keep moving even after click/hover
-      stopOnMouseEnter: true,       // pause only while hovering
+      delay: 2500,
+      stopOnInteraction: false,
+      stopOnMouseEnter: true,
       stopOnFocusIn: true,
-      rootNode: (root) => root.parentElement, // better mobile behavior
+      rootNode: (root) => root.parentElement,
     })
   );
 
   return (
     <div>
       <div>
-        <h1 className="text-4xl mt-3 font-bold text-center text-blue-600">
+        <h1 className="text-4xl mt-3 font-bold text-center text-emerald-700">
           Categories
         </h1>
-        <p className="text-center text-2xl mt-3 text-gray-600">
+
+        <p className="text-center text-2xl mt-3 text-emerald-600">
           Explore our extensive job market.
         </p>
       </div>
 
-      {/* Updated Carousel — full width + auto-scroll left to right */}
       <Carousel
         plugins={[plugin.current]}
-        className="w-full my-10"                    // ← full width
+        className="w-full my-10"
         onMouseEnter={plugin.current.stop}
         onMouseLeave={plugin.current.reset}
       >
@@ -75,7 +74,7 @@ const Categories = () => {
             >
               <Button
                 variant="outline"
-                className="w-full h-12 text-sm md:text-base font-medium border-2 text-purple-600 hover:bg-purple-50 hover:text-purple-900 transition-colors"
+                className="w-full h-12 text-sm md:text-base font-medium border-2 border-emerald-500 text-emerald-700 hover:bg-emerald-50 hover:text-emerald-900 transition-colors"
                 onClick={() => searchjobHandler(category)}
               >
                 {category}
@@ -84,13 +83,11 @@ const Categories = () => {
           ))}
         </CarouselContent>
 
-        {/* Keep arrows — user can still control manually */}
-        <CarouselPrevious className="-left-4 md:-left-12" />
-        <CarouselNext className="-right-4 md:-right-12" />
+        <CarouselPrevious className="-left-4 md:-left-12 text-emerald-700 border-emerald-500 hover:bg-emerald-50" />
+        <CarouselNext className="-right-4 md:-right-12 text-emerald-700 border-emerald-500 hover:bg-emerald-50" />
       </Carousel>
     </div>
   );
 };
-
 
 export default Categories;

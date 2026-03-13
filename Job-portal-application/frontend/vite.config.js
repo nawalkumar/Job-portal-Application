@@ -15,7 +15,7 @@ export default defineConfig({
       "/api": {
         target: "https://jobportal-backend-production-a02e.up.railway.app",
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
     },
   },

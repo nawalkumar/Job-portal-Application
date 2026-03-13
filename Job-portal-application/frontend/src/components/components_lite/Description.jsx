@@ -79,7 +79,7 @@ const Description = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
       </div>
     );
   }
@@ -105,7 +105,7 @@ const Description = () => {
               className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
               {singleJob.company?.[0] || "C"}
             </div>
           )}
@@ -113,14 +113,13 @@ const Description = () => {
           {/* Title + Company */}
           <div>
             <h1 className="text-3xl font-bold text-gray-900">{singleJob.title}</h1>
-            <p className="text-xl text-indigo-600 font-semibold mt-1">
+            <p className="text-xl text-emerald-600 font-semibold mt-1">
               {singleJob.company}
             </p>
           </div>
         </div>
 
         {/* Apply Button */}
-        {/* Apply Button or External Link */}
         <div>
           {singleJob.applicationLink ? (
             <button
@@ -137,7 +136,7 @@ const Description = () => {
                   window.open(singleJob.applicationLink, "_blank");
                 }
               }}
-              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
             >
               Apply Externally
             </button>
@@ -147,7 +146,7 @@ const Description = () => {
               disabled={isApplied}
               className={`px-8 py-3 rounded-full font-bold text-lg transition ${isApplied
                 ? "bg-gray-500 cursor-not-allowed"
-                : "bg-indigo-600 hover:bg-indigo-700"
+                : "bg-emerald-600 hover:bg-emerald-700"
                 }`}
             >
               {isApplied ? "Already Applied" : "Apply Now"}
@@ -159,13 +158,13 @@ const Description = () => {
 
       {/* BADGES */}
       <div className="flex flex-wrap gap-3 mb-6">
-        <Badge className="text-blue-700 bg-blue-50 px-4 py-1 text-sm font-medium">
+        <Badge className="text-emerald-700 bg-emerald-50 px-4 py-1 text-sm font-medium">
           {singleJob.position} Positions
         </Badge>
         <Badge className="text-red-700 bg-red-50 px-4 py-1 text-sm font-medium">
           {singleJob.salary} LPA
         </Badge>
-        <Badge className="text-purple-700 bg-purple-50 px-4 py-1 text-sm font-medium">
+        <Badge className="text-emerald-700 bg-emerald-50 px-4 py-1 text-sm font-medium">
           {singleJob.location}
         </Badge>
         <Badge className="text-gray-700 bg-gray-100 px-4 py-1 text-sm font-medium">

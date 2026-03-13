@@ -20,7 +20,7 @@ const EditProfileModal = ({ open, setOpen }) => {
   const { user } = useSelector((store) => store.auth);
 
   const [input, setInput] = useState({
-    fullname: user?.fullname, // Corrected from fullnamename to fullname
+    fullname: user?.fullname,
     email: user?.email,
     phoneNumber: user?.phoneNumber,
     bio: user?.profile?.bio,
@@ -59,7 +59,6 @@ const EditProfileModal = ({ open, setOpen }) => {
         }
       );
       if (res.data.success) {
-        // dispatch(setUser(res.data.user));
         dispatch(setUser({ ...res.data.user, skills: input.skills }));
         toast.success(res.data.message);
       }
@@ -70,8 +69,6 @@ const EditProfileModal = ({ open, setOpen }) => {
       setLoading(false);
     }
     setOpen(false);
-
-    console.log(input);
   };
 
   const FileChangehandler = (e) => {
@@ -87,9 +84,8 @@ const EditProfileModal = ({ open, setOpen }) => {
           onInteractOutside={() => setOpen(false)}
         >
           <DialogHeader>
-            <DialogTitle>Edit Profile</DialogTitle>
+            <DialogTitle className="text-emerald-700">Edit Profile</DialogTitle>
           </DialogHeader>
-          {/* Form for editing profile */}
           <form onSubmit={handleFileChange}>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-4 items-center gap-4">
@@ -100,9 +96,9 @@ const EditProfileModal = ({ open, setOpen }) => {
                   type="text"
                   id="name"
                   value={input.fullname}
-                  name="name"
+                  name="fullname"
                   onChange={changeEventHandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -115,7 +111,7 @@ const EditProfileModal = ({ open, setOpen }) => {
                   value={input.email}
                   name="email"
                   onChange={changeEventHandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -125,10 +121,10 @@ const EditProfileModal = ({ open, setOpen }) => {
                 <input
                   type="tel"
                   id="phone"
-                  value={input.phoneNumber} // Ensure this is correctly set
-                  name="phoneNumber" // Ensure this matches the expected key
+                  value={input.phoneNumber}
+                  name="phoneNumber"
                   onChange={changeEventHandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
               <div className="grid grid-cols-4 items-center gap-4">
@@ -136,15 +132,14 @@ const EditProfileModal = ({ open, setOpen }) => {
                   Bio
                 </Label>
                 <input
-                  type="bio"
+                  type="text"
                   id="bio"
                   value={input.bio}
                   name="bio"
                   onChange={changeEventHandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
-              {/* skills */}
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="skills" className="text-right">
                   Skills
@@ -154,10 +149,9 @@ const EditProfileModal = ({ open, setOpen }) => {
                   name="skills"
                   value={input.skills}
                   onChange={changeEventHandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition"
                 />
               </div>
-              {/* Resume file upload */}
               <div className="grid grid-cols-4 items-center gap-4">
                 <Label htmlFor="file" className="text-right">
                   Resume
@@ -168,20 +162,19 @@ const EditProfileModal = ({ open, setOpen }) => {
                   name="file"
                   accept="application/pdf"
                   onChange={FileChangehandler}
-                  className="col-span-3 border border-gray-300 rounded-md p-2"
+                  className="col-span-3 border border-gray-300 rounded-md p-2 file:mr-4 file:py-1 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 cursor-pointer"
                 />
               </div>
             </div>
 
             <DialogFooter>
               {loading ? (
-                <Button className="w-full my-4">
-                  {" "}
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait{" "}
+                <Button className="w-full my-4 bg-emerald-600">
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please wait
                 </Button>
               ) : (
-                <Button type="submit" className="w-full my-4">
-                  Save
+                <Button type="submit" className="w-full my-4 bg-emerald-600 hover:bg-emerald-700 text-white">
+                  Save Changes
                 </Button>
               )}
             </DialogFooter>

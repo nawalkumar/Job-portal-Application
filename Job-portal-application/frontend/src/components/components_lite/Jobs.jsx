@@ -3,21 +3,18 @@ import Navbar from "./Navbar";
 import FilterCard from "./Filtercard";
 import Job1 from "./Job1";
 import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; // Added AnimatePresence
 
 const Jobs = () => {
   const { allJobs, searchedQuery } = useSelector((store) => store.job);
   const [filterJobs, setFilterJobs] = useState(allJobs);
 
   useEffect(() => {
-    // If no search query is provided, reset to all jobs
-    //     if (searchedQuery)
     if (!searchedQuery || searchedQuery.trim() === "") {
       setFilterJobs(allJobs);
       return;
     }
 
-    // Filter based on the searched query across various fields (title, description, etc.)
     const filteredJobs = allJobs.filter((job) => {
       const query = searchedQuery.toLowerCase();
       return (
@@ -33,33 +30,42 @@ const Jobs = () => {
   }, [allJobs, searchedQuery]);
 
   return (
-    <div>
+    <div className="bg-gray-50 min-h-screen">
       <Navbar />
-      <div className="max-w-7xl mx-auto mt-5">
+      <div className="max-w-7xl mx-auto mt-5 px-4">
         <div className="flex gap-5">
-          <div className="w-1/5">
+          {/* Sidebar - Filter Card */}
+          <div className="w-1/4">
             <FilterCard />
           </div>
 
-          {filterJobs.length <= 0 ? (
-            <span>Job not found</span>
-          ) : (
-            <div className="flex-1 h-[88vh] overflow-y-auto pb-5">
-              <div className="grid grid-cols-3 gap-4">
-                {filterJobs.map((job) => (
-                  <motion.div
-                    initial={{ opacity: 0, x: 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -100 }}
-                    transition={{ duration: 0.4 }}
-                    key={job.id}
-                  >
-                    <Job1 job={job} />
-                  </motion.div>
-                ))}
+          {/* Job Listing Area */}
+          <div className="flex-1">
+            {filterJobs.length <= 0 ? (
+              <div className="flex flex-col items-center justify-center h-[60vh] bg-white rounded-2xl border border-dashed border-emerald-200 shadow-sm">
+                <span className="text-xl font-semibold text-emerald-800">No jobs match your search</span>
+                <p className="text-gray-500 mt-2">Try adjusting your filters or search keywords.</p>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="h-[85vh] overflow-y-auto pb-10 no-scrollbar">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-4">
+                  <AnimatePresence>
+                    {filterJobs.map((job) => (
+                      <motion.div
+                        key={job._id} // Changed from job.id to job._id to match MongoDB convention
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.9 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Job1 job={job} />
+                      </motion.div>
+                    ))}
+                  </AnimatePresence>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

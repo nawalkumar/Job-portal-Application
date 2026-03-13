@@ -13,34 +13,48 @@ import { useSelector } from "react-redux";
 
 const AppliedJob = () => {
   const { allAppliedJobs } = useSelector((store) => store.job);
+
   return (
-    <div>
+    <div className="bg-white rounded-xl">
       <Table>
-        <TableCaption>Recent Applied Jobs</TableCaption>
+        <TableCaption className="text-gray-400 pb-4">A list of your recent job applications</TableCaption>
         <TableHeader>
-          <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Job Title</TableHead>
-            <TableHead>Company</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+          <TableRow className="bg-emerald-50/50 hover:bg-emerald-50/50">
+            <TableHead className="font-bold text-gray-800">Date</TableHead>
+            <TableHead className="font-bold text-gray-800">Job Title</TableHead>
+            <TableHead className="font-bold text-gray-800">Company</TableHead>
+            <TableHead className="text-right font-bold text-gray-800">Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {allAppliedJobs.length <= 0 ? (
-            <span>You have not applied any job yet.</span>
+            <TableRow>
+              <TableCell colSpan={4} className="text-center py-8 text-gray-500">
+                You haven't applied to any jobs yet.
+              </TableCell>
+            </TableRow>
           ) : (
             allAppliedJobs.map((appliedJob) => (
-              <TableRow key={appliedJob._id}>
-                <TableCell>{appliedJob?.createdAt?.split("T")[0] || "N/A"}</TableCell>
-                <TableCell>{appliedJob.job?.title || "N/A"}</TableCell>
-                <TableCell>{appliedJob.job?.company?.name || "N/A"}</TableCell>
+              <TableRow
+                key={appliedJob._id}
+                className="hover:bg-emerald-50/30 transition-colors"
+              >
+                <TableCell className="text-gray-600">
+                  {appliedJob?.createdAt?.split("T")[0] || "N/A"}
+                </TableCell>
+                <TableCell className="font-medium text-gray-800">
+                  {appliedJob.job?.title || "N/A"}
+                </TableCell>
+                <TableCell className="text-gray-600">
+                  {appliedJob.job?.company?.name || "N/A"}
+                </TableCell>
                 <TableCell className="text-right">
                   <Badge
-                    className={`${appliedJob?.status === "rejected"
-                      ? "bg-red-500"
+                    className={`capitalize font-medium px-3 py-1 ${appliedJob?.status === "rejected"
+                      ? "bg-red-500 hover:bg-red-600"
                       : appliedJob?.status === "accepted"
-                        ? "bg-green-600"
-                        : "bg-gray-500"
+                        ? "bg-emerald-600 hover:bg-emerald-700"
+                        : "bg-gray-500 hover:bg-gray-600"
                       }`}
                   >
                     {appliedJob?.status || "pending"}
@@ -49,7 +63,6 @@ const AppliedJob = () => {
               </TableRow>
             ))
           )}
-
         </TableBody>
       </Table>
     </div>
