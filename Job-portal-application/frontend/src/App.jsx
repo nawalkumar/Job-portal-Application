@@ -20,6 +20,7 @@ import ProtectedRoute from "./components/admincomponent/ProtectedRoute";
 import Creator from "./components/creator/Creator.jsx";
 import { useDispatch } from "react-redux";
 import { setBookmarkedJobsList } from "@/redux/jobSlice";
+import { useEffect } from "react";
 
 const appRouter = createBrowserRouter([
   { path: "/", element: <Home /> },
