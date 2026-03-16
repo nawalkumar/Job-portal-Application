@@ -13,35 +13,30 @@ const useGetAllJobs = (page = 1) => { // Accept page param
   useEffect(() => {
     const fetchAllJobs = async () => {
       setLoading(true);
-      setError(null);
       try {
+        // Encode the keyword to handle spaces correctly in the URL
         const res = await axios.get(
-          `${JOB_API_ENDPOINT}/get?keyword=${searchedQuery}&page=${page}`, // Pass page to API
+          `${JOB_API_ENDPOINT}/get?keyword=${encodeURIComponent(searchedQuery)}&page=${page}`,
           { withCredentials: true }
         );
 
         if (res.data.status) {
           dispatch(setAllJobs(res.data.jobs));
-          // Store pagination info from backend
           dispatch(setPaginationData({
             totalPages: res.data.totalPages,
             currentPage: res.data.currentPage
           }));
-        } else {
-          setError("No jobs found.");
-          dispatch(setAllJobs([]));
         }
       } catch (err) {
         console.error("Fetch error:", err);
-        setError(err.response?.data?.message || "Failed to load jobs.");
+        // Clear jobs so UI doesn't show old data on error
+        dispatch(setAllJobs([]));
       } finally {
         setLoading(false);
       }
     };
-
     fetchAllJobs();
-  }, [searchedQuery, page, dispatch]); // Re-run when page changes
-
+  }, [searchedQuery, page, dispatch]);
   return { loading, error };
 };
 
