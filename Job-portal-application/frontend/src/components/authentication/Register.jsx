@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react"; // Modern spinner
+import Footer from "../components_lite/Footer";
 
 const Register = () => {
   const [input, setInput] = useState({
@@ -216,6 +217,7 @@ const Register = () => {
           </p>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };

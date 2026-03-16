@@ -10,6 +10,7 @@ import { USER_API_ENDPOINT } from "@/utils/data.js";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoading, setUser } from "@/redux/authSlice";
 import { Loader2 } from "lucide-react"; // Better spinner icon
+import Footer from "../components_lite/Footer";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -141,6 +142,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <Footer />
     </div>
   );
 };
