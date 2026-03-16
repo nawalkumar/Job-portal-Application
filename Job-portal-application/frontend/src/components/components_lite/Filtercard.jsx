@@ -27,11 +27,13 @@ const Filter = () => {
   };
 
   useEffect(() => {
-    // We convert everything to lowercase and take only the first part 
-    // of strings like "0-3 years" to make the search broader
     const query = Object.values(selectedFilters)
       .filter(Boolean)
-      .map(val => val.toLowerCase().split(" ")[0])
+      .map(val => {
+        // If the value is "0-3 years", just take "0-3"
+        // If it's "React Developer", just take "React"
+        return val.split(" ")[0].toLowerCase();
+      })
       .join(" ")
       .trim();
 
