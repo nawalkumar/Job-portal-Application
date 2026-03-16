@@ -103,6 +103,7 @@ const Jobs = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

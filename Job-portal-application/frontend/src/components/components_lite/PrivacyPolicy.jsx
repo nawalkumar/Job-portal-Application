@@ -139,6 +139,7 @@ const PrivacyPolicy = () => {
           &copy; {new Date().getFullYear()} JobPortal Inc. All rights reserved.
         </p>
       </div>
+      <Footer />
     </div>
   );
 };
