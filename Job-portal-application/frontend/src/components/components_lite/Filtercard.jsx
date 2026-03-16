@@ -30,9 +30,10 @@ const Filter = () => {
     const query = Object.values(selectedFilters)
       .filter(Boolean)
       .map(val => {
-        // If the value is "0-3 years", just take "0-3"
-        // If it's "React Developer", just take "React"
-        return val.split(" ")[0].toLowerCase();
+        // If it's a salary like "50k-100k", just send "50"
+        // If it's experience "3-5 years", just send "3"
+        const match = val.match(/\d+/);
+        return match ? match[0] : val;
       })
       .join(" ")
       .trim();
