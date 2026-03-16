@@ -10,7 +10,7 @@ import { setBookmarkedJobs } from "@/redux/jobSlice";
 const Job1 = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { bookmarkedJobs } = useSelector(store => store.job);
+  const { bookmarkedJobs = [] } = useSelector(store => store.job || {});
 
   const daysAgo = (date) => {
     const created = new Date(date);
@@ -28,7 +28,8 @@ const Job1 = ({ job }) => {
       .toUpperCase()
       .slice(0, 2);
   };
-  const isBookmarked = bookmarkedJobs.some(item => item._id === job._id);
+  const isBookmarked = bookmarkedJobs.some(item => item._id === job._id) || false;
+
 
   return (
     <div
