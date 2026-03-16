@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Navbar from "./Navbar";
+import Job1 from "./Job1";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { Contact, Mail, Pen } from "lucide-react";
@@ -15,6 +16,7 @@ const Profile = () => {
   useGetAppliedJobs();
   const [open, setOpen] = useState(false);
   const { user } = useSelector((store) => store.auth);
+  const { bookmarkedJobs } = useSelector((store) => store.job);
   return (
     <div>
       <Navbar />
@@ -103,6 +105,22 @@ const Profile = () => {
       <div className="max-w-4xl mx-auto bg-white rounded-2xl p-4">
         <h1 className="text-lg my-5 font-bold border-b border-emerald-100 pb-2">Applied Jobs</h1>
         <AppliedJob />
+      </div>
+
+      <div className="max-w-4xl mx-auto bg-white rounded-2xl p-4 mt-5 mb-10">
+        <h1 className="text-lg my-5 font-bold border-b border-emerald-100 pb-2">Bookmarked Jobs</h1>
+
+        {bookmarkedJobs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {bookmarkedJobs.map((job) => (
+              <Job1 key={job._id} job={job} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-10 border border-dashed border-gray-200 rounded-xl">
+            <p className="text-gray-500">You haven't bookmarked any jobs yet.</p>
+          </div>
+        )}
       </div>
 
       {/* Edit Profile Modal */}

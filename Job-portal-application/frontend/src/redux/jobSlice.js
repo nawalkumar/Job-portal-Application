@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   allJobs: [],
   allAdminJobs: [],
+  bookmarkedJobs: [],
   singleJob: null,
   searchJobByText: "",
   allAppliedJobs: [],
@@ -30,6 +31,15 @@ const jobSlice = createSlice({
     setSearchJobByText(state, action) { state.searchJobByText = action.payload; },
     setAllAppliedJobs(state, action) { state.allAppliedJobs = action.payload; },
     setSearchedQuery(state, action) { state.searchedQuery = action.payload; },
+    setBookmarkedJobs: (state, action) => {
+      const job = action.payload;
+      const exists = state.bookmarkedJobs.find((j) => j._id === job._id);
+      if (exists) {
+        state.bookmarkedJobs = state.bookmarkedJobs.filter((j) => j._id !== job._id);
+      } else {
+        state.bookmarkedJobs.push(job);
+      }
+    },
   },
 });
 

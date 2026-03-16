@@ -4,10 +4,13 @@ import { Button } from "../ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
 import { Bookmark, BookmarkCheck } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { setBookmarkedJobs } from "@/redux/jobSlice";
 
 const Job1 = ({ job }) => {
   const navigate = useNavigate();
-  const [isBookmarked, setIsBookmarked] = React.useState(false);
+  const dispatch = useDispatch();
+  const { bookmarkedJobs } = useSelector(store => store.job);
 
   const daysAgo = (date) => {
     const created = new Date(date);
@@ -25,6 +28,7 @@ const Job1 = ({ job }) => {
       .toUpperCase()
       .slice(0, 2);
   };
+  const isBookmarked = bookmarkedJobs.some(item => item._id === job._id);
 
   return (
     <div
@@ -36,12 +40,9 @@ const Job1 = ({ job }) => {
       <div className="flex justify-between items-center mb-3">
         <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
         <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full hover:bg-emerald-50"
           onClick={(e) => {
             e.stopPropagation();
-            setIsBookmarked(!isBookmarked);
+            dispatch(setBookmarkedJobs(job)); // Toggle bookmark in Redux
           }}
         >
           {isBookmarked ? (
