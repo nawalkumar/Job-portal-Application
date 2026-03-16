@@ -4,23 +4,21 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const useGetAllJobs = (page = 1) => { // Accept page param
+const useGetAllJobs = (page = 1) => {
   const dispatch = useDispatch();
   const { searchedQuery } = useSelector((store) => store.job);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchAllJobs = async () => {
       setLoading(true);
       try {
-        // Encode the keyword to handle spaces correctly in the URL
-        // ... existing imports
+        // We trim and encode to ensure "Pune " or "Mern " doesn't break the query
+        const query = encodeURIComponent(searchedQuery.trim());
         const res = await axios.get(
-          `${JOB_API_ENDPOINT}/get?keyword=${encodeURIComponent(searchedQuery || "")}&page=${page}`,
+          `${JOB_API_ENDPOINT}/get?keyword=${query}&page=${page}`,
           { withCredentials: true }
         );
-        // ... rest of the file
 
         if (res.data.status) {
           dispatch(setAllJobs(res.data.jobs));
@@ -30,16 +28,17 @@ const useGetAllJobs = (page = 1) => { // Accept page param
           }));
         }
       } catch (err) {
-        console.error("Fetch error:", err);
-        // Clear jobs so UI doesn't show old data on error
-        dispatch(setAllJobs([]));
+        console.error("Fetch Error:", err);
+        dispatch(setAllJobs([])); // Clear results on error
       } finally {
         setLoading(false);
       }
     };
+
     fetchAllJobs();
   }, [searchedQuery, page, dispatch]);
-  return { loading, error };
+
+  return { loading };
 };
 
 export default useGetAllJobs;

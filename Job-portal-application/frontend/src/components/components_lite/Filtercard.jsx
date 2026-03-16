@@ -6,17 +6,14 @@ import { setSearchedQuery } from "@/redux/jobSlice";
 
 const filterData = [
   { filterType: "Location", array: ["Delhi", "Mumbai", "Pune", "Bangalore", "Remote"] },
-  { filterType: "Technology", array: ["Mern", "React", "Node", "Python", "Java"] },
+  { filterType: "Technology", array: ["Mern", "React", "Node", "Python", "Java", "Frontend", "Backend"] },
   { filterType: "Experience", array: ["0-3 years", "3-5 years", "5-7 years"] },
   { filterType: "Salary", array: ["0-50k", "50k-100k", "100k-200k"] },
 ];
 
 const Filter = () => {
   const [selectedFilters, setSelectedFilters] = useState({
-    Location: "",
-    Technology: "",
-    Experience: "",
-    Salary: ""
+    Location: "", Technology: "", Experience: "", Salary: ""
   });
 
   const dispatch = useDispatch();
@@ -30,11 +27,11 @@ const Filter = () => {
   };
 
   useEffect(() => {
-    // Extract only the first word or main keyword to make search more flexible
-    // e.g., "0-3 years" -> "0-3"
+    // We convert everything to lowercase and take only the first part 
+    // of strings like "0-3 years" to make the search broader
     const query = Object.values(selectedFilters)
       .filter(Boolean)
-      .map(val => val.split(" ")[0])
+      .map(val => val.toLowerCase().split(" ")[0])
       .join(" ")
       .trim();
 
@@ -68,7 +65,7 @@ const Filter = () => {
                 return (
                   <div key={itemId} className="flex items-center space-x-3 group cursor-pointer">
                     <RadioGroupItem value={item} id={itemId} />
-                    <Label htmlFor={itemId} className="cursor-pointer font-normal text-gray-600 group-hover:text-emerald-600 transition-colors">
+                    <Label htmlFor={itemId} className="cursor-pointer font-normal text-gray-600 group-hover:text-emerald-600">
                       {item}
                     </Label>
                   </div>
