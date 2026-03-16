@@ -31,14 +31,22 @@ const jobSlice = createSlice({
     setSearchJobByText(state, action) { state.searchJobByText = action.payload; },
     setAllAppliedJobs(state, action) { state.allAppliedJobs = action.payload; },
     setSearchedQuery(state, action) { state.searchedQuery = action.payload; },
+    setBookmarkedJobsList: (state, action) => {
+      state.bookmarkedJobs = action.payload || [];
+    },
+
     setBookmarkedJobs: (state, action) => {
       const job = action.payload;
       const exists = state.bookmarkedJobs.find((j) => j._id === job._id);
+
       if (exists) {
         state.bookmarkedJobs = state.bookmarkedJobs.filter((j) => j._id !== job._id);
       } else {
         state.bookmarkedJobs.push(job);
       }
+
+      // Save to localStorage every time a bookmark is added or removed
+      localStorage.setItem("bookmarks", JSON.stringify(state.bookmarkedJobs));
     },
   },
 });
@@ -46,8 +54,9 @@ const jobSlice = createSlice({
 export const {
   setAllJobs,
   setPaginationData, // Export new action
-  setSingleJob, setAllAdminJobs, setSearchJobByText, setAllAppliedJobs, setSearchedQuery, setBookmarkedJobs
+  setSingleJob, setAllAdminJobs, setSearchJobByText, setAllAppliedJobs, setSearchedQuery, setBookmarkedJobs, setBookmarkedJobsList
 } = jobSlice.actions;
+
 
 // Export reducer
 export default jobSlice.reducer;

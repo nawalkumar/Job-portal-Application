@@ -117,6 +117,14 @@ const appRouter = createBrowserRouter([
 ]);
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const savedBookmarks = JSON.parse(localStorage.getItem("bookmarks"));
+    if (savedBookmarks) {
+      dispatch(setBookmarkedJobsList(savedBookmarks));
+    }
+  }, [dispatch]);
   return (
     <div>
       <RouterProvider router={appRouter}></RouterProvider>
