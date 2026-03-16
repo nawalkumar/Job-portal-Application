@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import { Scale, CheckCircle, AlertTriangle, Copyright, Gavel, Mail } from "lucide-react";
+import Footer from "./Footer";
 
 const TermsOfService = () => {
   return (
@@ -146,6 +147,7 @@ const TermsOfService = () => {
           Safe & Secure Recruitment Platform
         </p>
       </div>
+      <Footer />
     </div>
   );
 };

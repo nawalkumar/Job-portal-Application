@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar"; // Assuming you want the navbar here
 import { ShieldCheck, Lock, Eye, FileText, Mail } from "lucide-react";
+import Footer from "./Footer";
 
 const PrivacyPolicy = () => {
   return (

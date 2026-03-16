@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { motion, AnimatePresence } from "framer-motion";
 import useGetAllJobs from "@/hooks/useGetAllJobs";
 import { Button } from "../ui/button";
+import Footer from "./Footer";
 
 const Jobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
