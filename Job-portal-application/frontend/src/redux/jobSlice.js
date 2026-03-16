@@ -46,7 +46,7 @@ const jobSlice = createSlice({
 export const {
   setAllJobs,
   setPaginationData, // Export new action
-  setSingleJob, setAllAdminJobs, setSearchJobByText, setAllAppliedJobs, setSearchedQuery
+  setSingleJob, setAllAdminJobs, setSearchJobByText, setAllAppliedJobs, setSearchedQuery, setBookmarkedJobs
 } = jobSlice.actions;
 
 // Export reducer
