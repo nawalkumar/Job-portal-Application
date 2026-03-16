@@ -1,6 +1,7 @@
 import React from 'react';
 import Navbar from '../components_lite/Navbar';
 import { CheckCircle2, Rocket, Users, Briefcase, Bell, LayoutDashboard } from 'lucide-react';
+import Footer from '../components_lite/Footer';
 
 const Creator = () => {
     const instructions = [
@@ -85,6 +86,7 @@ const Creator = () => {
 
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

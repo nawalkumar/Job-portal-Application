@@ -9,6 +9,7 @@ import AppliedJob from "./AppliedJob";
 import EditProfileModal from "./EditProfileModal";
 import { useSelector } from "react-redux";
 import useGetAppliedJobs from "@/hooks/useGetAllAppliedJobs";
+import Footer from "./Footer";
 
 
 const isResume = true;
@@ -122,8 +123,8 @@ const Profile = () => {
           </div>
         )}
       </div>
+      <Footer />
 
-      {/* Edit Profile Modal */}
       <EditProfileModal open={open} setOpen={setOpen} />
     </div>
   );
