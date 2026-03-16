@@ -69,7 +69,7 @@ const Jobs = () => {
 
                 {/* --- PAGINATION UI --- */}
                 {paginationData.totalPages > 1 && (
-                  <div className="flex items-center justify-center mt-10 gap-4">
+                  <div className="flex items-center justify-center mt-9 mb-1 gap-4">
                     <Button
                       variant="outline"
                       disabled={currentPage === 1}

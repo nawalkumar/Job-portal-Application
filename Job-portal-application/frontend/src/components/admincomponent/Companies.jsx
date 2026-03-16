@@ -4,7 +4,7 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import CompaniesTable from "./CompaniesTable";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components_lite/Footer";
+// import Footer from "../components_lite/Footer";
 import useGetAllCompanies from "@/hooks/usegetAllCompanies";
 import { useDispatch } from "react-redux";
 import { setSearchCompanyByText } from "@/redux/companyslice";
@@ -37,7 +37,7 @@ const Companies = () => {
           <CompaniesTable />
         </div>
       </div>
-      <Footer />
+      {/* <Footer  class="mb-0"/> */}
     </div>
   );
 };
