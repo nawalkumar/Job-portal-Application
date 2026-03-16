@@ -179,44 +179,43 @@ const Description = () => {
         </h2>
 
         <div
-          className="prose prose-lg max-w-none text-gray-700 leading-relaxed space-y-4"
+          className="custom-description text-gray-700 text-lg leading-relaxed space-y-4 text-justify"
           dangerouslySetInnerHTML={{
-            __html: singleJob.description || "<p>No description available.</p>",
+            // We add a little regex to replace '#' with a bullet point for better looks
+            __html: (singleJob.description || "No description available.").replace(/#/g, "•")
           }}
         />
       </div>
 
-      {/* JOB DETAILS GRID */}
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
-        <div>
-          <p className="font-semibold text-lg">
-            Role:{" "}
-            <span className="font-normal">{singleJob.position} Open Positions</span>
-          </p>
-          <p className="font-semibold text-lg mt-3">
-            Location: <span className="font-normal">{singleJob.location}</span>
-          </p>
-          <p className="font-semibold text-lg mt-3">
-            Salary: <span className="font-normal">{singleJob.salary} LPA</span>
-          </p>
-          <p className="font-semibold text-lg mt-3">
-            Experience: <span className="font-normal">{singleJob.experienceLevel} Year(s)</span>
-          </p>
+      {/* JOB DETAILS GRID - Added a background and border to make it look like a "Card" */}
+      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50 border border-gray-100 rounded-2xl">
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Role:</span>
+            <span className="text-gray-600">{singleJob.position} Open Positions</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Location:</span>
+            <span className="text-gray-600">{singleJob.location}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Salary:</span>
+            <span className="text-gray-600">{singleJob.salary} LPA</span>
+          </div>
         </div>
-        <div>
-          <p className="font-semibold text-lg">
-            Total Applicants:{" "}
-            <span className="font-normal">{singleJob.applications?.length || 0}</span>
-          </p>
-          <p className="font-semibold text-lg mt-3">
-            Job Type: <span className="font-normal">{singleJob.jobType}</span>
-          </p>
-          <p className="font-semibold text-lg mt-3">
-            Posted On:{" "}
-            <span className="font-normal">
-              {new Date(singleJob.createdAt).toLocaleDateString()}
-            </span>
-          </p>
+        <div className="space-y-4">
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Experience:</span>
+            <span className="text-gray-600">{singleJob.experienceLevel} Year(s)</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Applicants:</span>
+            <span className="text-gray-600">{singleJob.applications?.length || 0}</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-gray-800">Job Type:</span>
+            <span className="text-gray-600">{singleJob.jobType}</span>
+          </div>
         </div>
       </div>
 

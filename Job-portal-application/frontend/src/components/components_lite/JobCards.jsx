@@ -53,9 +53,10 @@ const JobCards = ({ job }) => {
       {/* Description with HTML */}
       <div className="mb-4">
         <div
-          className="prose prose-sm max-w-none text-gray-600 line-clamp-3 leading-snug"
+          className="custom-description text-gray-600 text-sm line-clamp-3 leading-6 tracking-wide"
           dangerouslySetInnerHTML={{
-            __html: job.description || "No description available.",
+            // Clean up hashtags and clumping for the card preview
+            __html: (job.description || "No description available.").replace(/#/g, "")
           }}
         />
       </div>

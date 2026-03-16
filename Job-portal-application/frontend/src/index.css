@@ -3,6 +3,17 @@
 @tailwind utilities;
 
 /* ... */
+/* This ensures that raw text with line breaks (\n) actually breaks onto new lines */
+.custom-description {
+  white-space: pre-line;
+  word-wrap: break-word;
+  line-height: 1.8;
+}
+
+/* Remove or style those annoying '#' symbols if they are coming from the data */
+.custom-description::first-letter {
+  text-transform: uppercase;
+}
 
 @layer base {
   :root {
@@ -57,6 +68,7 @@
 
     --radius: 0.5rem
   }
+
   .dark {
 
     --background: 240 10% 3.9%;
@@ -113,6 +125,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
