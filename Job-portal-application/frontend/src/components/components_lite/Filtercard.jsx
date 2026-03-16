@@ -5,14 +5,13 @@ import { useDispatch } from "react-redux";
 import { setSearchedQuery } from "@/redux/jobSlice";
 
 const filterData = [
-  { filterType: "Location", array: ["Delhi", "Mumbai", "Kolhapur", "Pune", "Bangalore", "Hyderabad", "Chennai", "Remote"] },
-  { filterType: "Technology", array: ["Mern", "React", "Data Scientist", "Fullstack", "Node", "Python", "Java", "frontend", "backend", "mobile", "desktop"] },
-  { filterType: "Experience", array: ["0-3 years", "3-5 years", "5-7 years", "7+ years"] },
-  { filterType: "Salary", array: ["0-50k", "50k-100k", "100k-200k", "200k+"] },
+  { filterType: "Location", array: ["Delhi", "Mumbai", "Pune", "Bangalore", "Remote"] },
+  { filterType: "Technology", array: ["Mern", "React", "Node", "Python", "Java"] },
+  { filterType: "Experience", array: ["0-3 years", "3-5 years", "5-7 years"] },
+  { filterType: "Salary", array: ["0-50k", "50k-100k", "100k-200k"] },
 ];
 
 const Filter = () => {
-  // Use an object to track each category independently
   const [selectedFilters, setSelectedFilters] = useState({
     Location: "",
     Technology: "",
@@ -31,11 +30,13 @@ const Filter = () => {
   };
 
   useEffect(() => {
-    // .filter(Boolean) ensures we don't send empty strings for unselected filters
+    // Extract only the first word or main keyword to make search more flexible
+    // e.g., "0-3 years" -> "0-3"
     const query = Object.values(selectedFilters)
-      .filter(val => val !== "" && val !== null)
+      .filter(Boolean)
+      .map(val => val.split(" ")[0])
       .join(" ")
-      .trim(); // Remove any leading/trailing whitespace
+      .trim();
 
     dispatch(setSearchedQuery(query));
   }, [selectedFilters, dispatch]);
@@ -47,21 +48,16 @@ const Filter = () => {
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-xl text-gray-800">Filter Jobs</h1>
         {hasFilters && (
-          <button
-            onClick={clearAll}
-            className="text-xs text-emerald-600 hover:underline font-medium"
-          >
+          <button onClick={clearAll} className="text-xs text-emerald-600 hover:underline font-medium">
             Clear All
           </button>
         )}
       </div>
       <hr className="mt-3 mb-5 border-gray-100" />
-
       <div className="space-y-6">
         {filterData.map((data, index) => (
           <div key={index}>
             <h2 className="font-bold text-md text-[#1F2937] mb-3">{data.filterType}</h2>
-            {/* EACH CATEGORY GETS ITS OWN RADIOGROUP */}
             <RadioGroup
               value={selectedFilters[data.filterType]}
               onValueChange={(value) => handleFilterChange(data.filterType, value)}
@@ -72,10 +68,7 @@ const Filter = () => {
                 return (
                   <div key={itemId} className="flex items-center space-x-3 group cursor-pointer">
                     <RadioGroupItem value={item} id={itemId} />
-                    <Label
-                      htmlFor={itemId}
-                      className="cursor-pointer font-normal text-gray-600 group-hover:text-emerald-600 transition-colors"
-                    >
+                    <Label htmlFor={itemId} className="cursor-pointer font-normal text-gray-600 group-hover:text-emerald-600 transition-colors">
                       {item}
                     </Label>
                   </div>

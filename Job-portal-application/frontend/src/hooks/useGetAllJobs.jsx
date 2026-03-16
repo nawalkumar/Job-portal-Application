@@ -15,10 +15,12 @@ const useGetAllJobs = (page = 1) => { // Accept page param
       setLoading(true);
       try {
         // Encode the keyword to handle spaces correctly in the URL
+        // ... existing imports
         const res = await axios.get(
-          `${JOB_API_ENDPOINT}/get?keyword=${encodeURIComponent(searchedQuery)}&page=${page}`,
+          `${JOB_API_ENDPOINT}/get?keyword=${encodeURIComponent(searchedQuery || "")}&page=${page}`,
           { withCredentials: true }
         );
+        // ... rest of the file
 
         if (res.data.status) {
           dispatch(setAllJobs(res.data.jobs));
