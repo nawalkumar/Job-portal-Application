@@ -31,8 +31,12 @@ const Filter = () => {
   };
 
   useEffect(() => {
-    // Combine selected values into a single string for your Redux state
-    const query = Object.values(selectedFilters).filter(Boolean).join(" ");
+    // .filter(Boolean) ensures we don't send empty strings for unselected filters
+    const query = Object.values(selectedFilters)
+      .filter(val => val !== "" && val !== null)
+      .join(" ")
+      .trim(); // Remove any leading/trailing whitespace
+
     dispatch(setSearchedQuery(query));
   }, [selectedFilters, dispatch]);
 
