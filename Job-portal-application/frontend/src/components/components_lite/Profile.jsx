@@ -110,7 +110,7 @@ const Profile = () => {
       <div className="max-w-4xl mx-auto bg-white rounded-2xl p-4 mt-5 mb-10">
         <h1 className="text-lg my-5 font-bold border-b border-emerald-100 pb-2">Bookmarked Jobs</h1>
 
-        {bookmarkedJobs.length > 0 ? (
+        {bookmarkedJobs?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {bookmarkedJobs.map((job) => (
               <Job1 key={job._id} job={job} />

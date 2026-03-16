@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   allJobs: [],
   allAdminJobs: [],
-  bookmarkedJobs: [],
+  bookmarkedJobs: JSON.parse(localStorage.getItem("bookmarks")) || [],
   singleJob: null,
   searchJobByText: "",
   allAppliedJobs: [],

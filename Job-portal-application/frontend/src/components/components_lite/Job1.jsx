@@ -41,6 +41,9 @@ const Job1 = ({ job }) => {
       <div className="flex justify-between items-center mb-3">
         <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
         <Button
+          variant="ghost"
+          size="icon"
+          className="rounded-full hover:bg-emerald-50"
           onClick={(e) => {
             e.stopPropagation();
             dispatch(setBookmarkedJobs(job)); // Toggle bookmark in Redux
