@@ -25,7 +25,7 @@ const Browse = () => {
           Search Results (
           <span className="text-emerald-600">{allJobs.length}</span>)
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-stretch">
           {allJobs.length === 0 ? (
             <div className="col-span-full py-20 text-center bg-white rounded-xl border border-dashed border-emerald-200">
               <p className="text-gray-500 font-medium">
