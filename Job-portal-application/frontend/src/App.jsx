@@ -18,6 +18,7 @@ import PostJob from "./components/admincomponent/PostJob";
 import Applicants from "./components/admincomponent/Applicants";
 import ProtectedRoute from "./components/admincomponent/ProtectedRoute";
 import Creator from "./components/creator/Creator.jsx";
+import { Analytics } from "@vercel/analytics/react";
 
 const appRouter = createBrowserRouter([
   { path: "/", element: <Home /> },
@@ -120,6 +121,7 @@ function App() {
   return (
     <div>
       <RouterProvider router={appRouter}></RouterProvider>
+      <Analytics />
     </div>
   );
 }
