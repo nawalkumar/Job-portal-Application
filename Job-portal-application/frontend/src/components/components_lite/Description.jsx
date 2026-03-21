@@ -1,4 +1,3 @@
-// components/Description.jsx
 import React, { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
@@ -8,6 +7,7 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleJob } from "@/redux/jobSlice";
 import { toast } from "sonner";
+import { Sparkles } from "lucide-react"; // Imported for AI Match UI
 
 const Description = () => {
   const params = useParams();
@@ -78,7 +78,7 @@ const Description = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-64">
+      <div className="flex justify-center items-center h-screen">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
       </div>
     );
@@ -86,148 +86,127 @@ const Description = () => {
 
   if (error || !singleJob) {
     return (
-      <div className="text-center py-10">
-        <p className="text-red-600">{error || "Job not found"}</p>
+      <div className="text-center py-20">
+        <p className="text-red-600 text-xl font-semibold">{error || "Job not found"}</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto my-10 p-6 bg-white rounded-xl shadow-lg">
-      {/* HEADER: Logo + Title + Company */}
-      <div className="flex items-center justify-between mb-8">
-        <div className="flex items-center gap-5">
-          {/* Company Logo */}
+    // Removed fixed heights to ensure content can expand as long as needed
+    <div className="max-w-5xl mx-auto my-10 p-4 md:p-10 bg-white rounded-2xl shadow-sm border border-gray-100">
+      
+      {/* HEADER SECTION */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+        <div className="flex items-center gap-6">
           {singleJob.companyLogo ? (
             <img
               src={singleJob.companyLogo}
               alt={singleJob.company}
-              className="w-20 h-20 rounded-full object-cover border-4 border-white shadow-md"
+              className="w-24 h-24 rounded-2xl object-cover border border-gray-100 shadow-sm"
             />
           ) : (
-            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+            <div className="w-24 h-24 rounded-2xl bg-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
               {singleJob.company?.[0] || "C"}
             </div>
           )}
 
-          {/* Title + Company */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">{singleJob.title}</h1>
-            <p className="text-xl text-emerald-600 font-semibold mt-1">
-              {singleJob.company}
-            </p>
+            <div className="flex items-center gap-3 flex-wrap">
+              <h1 className="text-3xl font-extrabold text-gray-900">{singleJob.title}</h1>
+              
+              {/* AI Match Badge - Shown if available */}
+              {singleJob.matchScore && (
+                <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 text-sm font-bold animate-pulse">
+                  <Sparkles className="w-4 h-4" />
+                  {singleJob.matchScore}% AI Match
+                </div>
+              )}
+            </div>
+            <p className="text-lg text-emerald-600 font-medium mt-1">{singleJob.company}</p>
           </div>
         </div>
 
-        {/* Apply Button */}
-        <div>
+        {/* ACTION BUTTON */}
+        <div className="shrink-0">
           {singleJob.applicationLink ? (
-            <button
+            <Button
               onClick={() => {
-                const isProfileComplete =
-                  user?.fullname &&
-                  user?.email &&
-                  user?.phoneNumber &&
-                  user?.profile?.resume;
-
+                const isProfileComplete = user?.profile?.resume;
                 if (!isProfileComplete) {
-                  toast.error("⚠ Complete your profile to apply externally.");
+                  toast.error("Please upload your resume in profile to apply.");
                 } else {
                   window.open(singleJob.applicationLink, "_blank");
                 }
               }}
-              className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 py-3 rounded-full font-bold text-lg shadow-lg transition transform hover:scale-105"
+              className="bg-emerald-600 hover:bg-emerald-700 text-white px-10 py-6 rounded-xl font-bold text-lg transition-all"
             >
               Apply Externally
-            </button>
+            </Button>
           ) : (
             <Button
               onClick={isApplied ? null : applyJobHandler}
               disabled={isApplied}
-              className={`px-8 py-3 rounded-full font-bold text-lg transition ${isApplied
-                ? "bg-gray-500 cursor-not-allowed"
-                : "bg-emerald-600 hover:bg-emerald-700"
-                }`}
+              className={`px-10 py-6 rounded-xl font-bold text-lg transition-all ${
+                isApplied ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 text-white"
+              }`}
             >
-              {isApplied ? "Already Applied" : "Apply Now"}
+              {isApplied ? "Application Submitted" : "Apply Now"}
             </Button>
           )}
         </div>
-
       </div>
 
-      {/* BADGES */}
-      <div className="flex flex-wrap gap-3 mb-6">
-        <Badge className="text-emerald-700 bg-emerald-50 px-4 py-1 text-sm font-medium">
+      {/* QUICK STATS BADGES */}
+      <div className="flex flex-wrap gap-3 mb-10 pb-8 border-b border-gray-100">
+        <Badge variant="secondary" className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 px-4 py-1.5 rounded-lg border-none shadow-none">
           {singleJob.position} Positions
         </Badge>
-        <Badge className="text-red-700 bg-red-50 px-4 py-1 text-sm font-medium">
+        <Badge variant="secondary" className="bg-orange-50 text-orange-700 hover:bg-orange-50 px-4 py-1.5 rounded-lg border-none shadow-none">
           {singleJob.salary} LPA
         </Badge>
-        <Badge className="text-emerald-700 bg-emerald-50 px-4 py-1 text-sm font-medium">
+        <Badge variant="secondary" className="bg-blue-50 text-blue-700 hover:bg-blue-50 px-4 py-1.5 rounded-lg border-none shadow-none">
           {singleJob.location}
         </Badge>
-        <Badge className="text-gray-700 bg-gray-100 px-4 py-1 text-sm font-medium">
+        <Badge variant="secondary" className="bg-purple-50 text-purple-700 hover:bg-purple-50 px-4 py-1.5 rounded-lg border-none shadow-none">
           {singleJob.jobType}
         </Badge>
       </div>
 
-      {/* FULL DESCRIPTION WITH HTML */}
-      <div className="mt-10">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-gray-200 pb-3">
-          Job Description
+      {/* THE DESCRIPTION AREA - Ensures text is never cut off */}
+      <div className="w-full">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+          About this Role
         </h2>
 
+        {/* Removed 'line-clamp' and 'overflow' to let text flow naturally */}
         <div
-          className="custom-description text-gray-700 text-lg leading-relaxed space-y-4 text-justify"
+          className="rich-text-content text-gray-700 text-lg leading-relaxed space-y-4 prose prose-emerald max-w-none"
           dangerouslySetInnerHTML={{
-            // We add a little regex to replace '#' with a bullet point for better looks
-            __html: (singleJob.description || "No description available.").replace(/#/g, "•")
+            __html: (singleJob.description || "No details provided.")
+              .replace(/#/g, "<br/>• ")
+              .replace(/\n/g, "<br/>")
           }}
         />
       </div>
 
-      {/* JOB DETAILS GRID - Added a background and border to make it look like a "Card" */}
-      <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 bg-gray-50 border border-gray-100 rounded-2xl">
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Role:</span>
-            <span className="text-gray-600">{singleJob.position} Open Positions</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Location:</span>
-            <span className="text-gray-600">{singleJob.location}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Salary:</span>
-            <span className="text-gray-600">{singleJob.salary} LPA</span>
-          </div>
+      {/* DETAILED INFO GRID */}
+      <div className="mt-16 grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-gray-50 rounded-3xl border border-gray-100">
+        <div className="flex flex-col gap-1">
+          <span className="text-sm text-gray-500 font-medium">Experience Required</span>
+          <span className="text-lg font-bold text-gray-800">{singleJob.experienceLevel} Year(s)</span>
         </div>
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Experience:</span>
-            <span className="text-gray-600">{singleJob.experienceLevel} Year(s)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Applicants:</span>
-            <span className="text-gray-600">{singleJob.applications?.length || 0}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-gray-800">Job Type:</span>
-            <span className="text-gray-600">{singleJob.jobType}</span>
-          </div>
+        <div className="flex flex-col gap-1">
+          <span className="text-sm text-gray-500 font-medium">Total Applicants</span>
+          <span className="text-lg font-bold text-gray-800">{singleJob.applications?.length || 0} People</span>
+        </div>
+        <div className="flex flex-col gap-1">
+          <span className="text-sm text-gray-500 font-medium">Posted Date</span>
+          <span className="text-lg font-bold text-gray-800">
+            {new Date(singleJob.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+          </span>
         </div>
       </div>
-
-      {/* DEBUG: Remove in production */}
-      {process.env.NODE_ENV === "development" && (
-        <details className="mt-8 text-xs text-gray-500">
-          <summary>Debug: Raw HTML</summary>
-          <pre className="bg-gray-100 p-3 rounded mt-2 text-xs overflow-auto">
-            {singleJob.description}
-          </pre>
-        </details>
-      )}
     </div>
   );
 };
