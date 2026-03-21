@@ -59,7 +59,8 @@ const jobSlice = createSlice({
 
 export const {
   setAllJobs,
-  setPaginationData, // Export new action
+  setPaginationData,
+  setRecommendedJobs,// Export new action
   setSingleJob, setAllAdminJobs, setSearchJobByText, setAllAppliedJobs, setSearchedQuery, setBookmarkedJobs
 } = jobSlice.actions;
 
