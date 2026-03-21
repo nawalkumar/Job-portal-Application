@@ -2,21 +2,22 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import Job1 from './Job1';
 import useGetRecommendedJobs from '@/hooks/useGetRecommendedJobs';
-import { Sparkles } from 'lucide-react'; // Nice icon for recommendations
+import { Sparkles } from 'lucide-react';
 
 const RecommendedJobs = () => {
-    // 1. Get user and jobs from Redux
     const { user } = useSelector(store => store.auth);
-    const { recommendedJobs } = useSelector(store => store.job);
 
-    // 2. Call the hook ONLY if user exists (Condition inside hook or here)
+    // Add " = [] " here to prevent 'undefined' errors
+    const { recommendedJobs = [] } = useSelector(store => store.job);
+
     useGetRecommendedJobs();
 
-    // 3. AUTHENTICATION STATUS CHECK: If no user, return nothing
     if (!user) return null;
 
-    // 4. DATA CHECK: If logged in but no matches found yet, return nothing (or a loader)
-    if (recommendedJobs.length === 0) return null;
+    // Safety check: Ensure recommendedJobs exists and has items
+    if (!recommendedJobs || recommendedJobs.length === 0) {
+        return null;
+    }
 
     return (
         <div className="max-w-7xl mx-auto my-10 px-4">
@@ -28,8 +29,9 @@ const RecommendedJobs = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Now .slice() is safe because we guaranteed recommendedJobs is an array */}
                 {recommendedJobs.slice(0, 3).map((job) => (
-                    <Job1 key={job._id} job={job} />
+                    <Job1 key={job?._id} job={job} />
                 ))}
             </div>
         </div>

@@ -1,5 +1,6 @@
 import { setRecommendedJobs } from "@/redux/jobSlice";
 import axios from "axios";
+import { JOB_API_ENDPOINT } from "@/utils/data";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
