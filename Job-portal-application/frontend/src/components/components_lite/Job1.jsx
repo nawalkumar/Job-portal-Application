@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { Badge } from "../ui/badge";
-import { Bookmark, BookmarkCheck } from "lucide-react";
+import { Bookmark, BookmarkCheck, Sparkles } from "lucide-react"; // Added Sparkles icon for AI feel
 import { useDispatch, useSelector } from "react-redux";
 import { setBookmarkedJobs } from "@/redux/jobSlice";
 
@@ -11,6 +11,9 @@ const Job1 = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bookmarkedJobs = [] } = useSelector(store => store.job || {});
+  
+  // Logic to check if this is a recommended job with a match score
+  const hasMatchScore = job?.matchScore !== undefined;
 
   const daysAgo = (date) => {
     const created = new Date(date);
@@ -28,25 +31,36 @@ const Job1 = ({ job }) => {
       .toUpperCase()
       .slice(0, 2);
   };
+  
   const isBookmarked = bookmarkedJobs.some(item => item._id === job._id) || false;
-
 
   return (
     <div
       onClick={() => navigate(`/description/${job._id}`)}
       className="flex flex-col h-full p-5 rounded-xl bg-white border border-gray-200 cursor-pointer 
-                 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 group"
+                 hover:shadow-xl hover:border-emerald-300 transition-all duration-300 group relative"
     >
-      {/* Header: Time + Bookmark */}
+      {/* Header: Time + Match Score + Bookmark */}
       <div className="flex justify-between items-center mb-3">
-        <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
+        <div className="flex items-center gap-2">
+           <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
+           
+           {/* --- AI MATCH BADGE --- */}
+           {hasMatchScore && (
+             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-bold text-emerald-700 uppercase tracking-tight">
+               <Sparkles className="h-2.5 w-2.5" />
+               {job.matchScore}% Match
+             </div>
+           )}
+        </div>
+
         <Button
           variant="ghost"
           size="icon"
           className="rounded-full hover:bg-emerald-50"
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setBookmarkedJobs(job)); // Toggle bookmark in Redux
+            dispatch(setBookmarkedJobs(job)); 
           }}
         >
           {isBookmarked ? (
@@ -77,14 +91,14 @@ const Job1 = ({ job }) => {
         </div>
       </div>
 
-      {/* Title - Fixed height for 2 lines ensures alignment */}
+      {/* Title */}
       <div className="min-h-[3.5rem] flex items-start">
         <h2 className="font-bold text-xl text-gray-900 line-clamp-2 group-hover:text-emerald-600 transition leading-tight">
           {job.title}
         </h2>
       </div>
 
-      {/* Description - Fixed height for consistency */}
+      {/* Description */}
       <div className="flex-grow mb-4">
         <div
           className="custom-description text-gray-600 text-sm line-clamp-3 leading-relaxed"
@@ -110,7 +124,7 @@ const Job1 = ({ job }) => {
         </Badge>
       </div>
 
-      {/* Apply Button - mt-auto pushes this to the absolute bottom */}
+      {/* Apply Button */}
       {job.applicationLink && (
         <div className="mt-auto">
           <a
