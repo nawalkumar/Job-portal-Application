@@ -9,7 +9,7 @@ import Footer from "./Footer";
 import { useDispatch, useSelector } from "react-redux";
 import { setSingleJob } from "@/redux/jobSlice";
 import { toast } from "sonner";
-import { Sparkles } from "lucide-react"; // Imported for AI Match UI
+import { Sparkles } from "lucide-react";
 
 const Description = () => {
   const params = useParams();
@@ -97,7 +97,6 @@ const Description = () => {
   return (
     <>
       <Navbar />
-    // Removed fixed heights to ensure content can expand as long as needed
       <div className="max-w-5xl mx-auto my-10 p-4 md:p-10 bg-white rounded-2xl shadow-sm border border-gray-100">
 
         {/* HEADER SECTION */}
@@ -119,7 +118,6 @@ const Description = () => {
               <div className="flex items-center gap-3 flex-wrap">
                 <h1 className="text-3xl font-extrabold text-gray-900">{singleJob.title}</h1>
 
-                {/* AI Match Badge - Shown if available */}
                 {singleJob.matchScore && (
                   <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 text-sm font-bold animate-pulse">
                     <Sparkles className="w-4 h-4" />
@@ -182,7 +180,6 @@ const Description = () => {
             About this Role
           </h2>
 
-          {/* Removed 'line-clamp' and 'overflow' to let text flow naturally */}
           <div
             className="rich-text-content text-gray-700 text-lg leading-relaxed space-y-4 prose prose-emerald max-w-none"
             dangerouslySetInnerHTML={{
