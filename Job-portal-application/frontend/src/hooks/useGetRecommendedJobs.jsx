@@ -13,7 +13,7 @@ const useGetRecommendedJobs = () => {
             if (!user) return;
 
             try {
-                const res = await axios.get(`https://job-portal-application-ot68.vercel.app/api/v1/job/recommendations`, {
+                const res = await axios.get(`${JOB_API_ENDPOINT}/recommendations`, {
                     withCredentials: true
                 });
                 if (res.data.success) {
