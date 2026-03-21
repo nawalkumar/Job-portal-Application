@@ -11,6 +11,7 @@ const Job1 = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bookmarkedJobs = [] } = useSelector(store => store.job || {});
+  const hasMatchScore = job?.matchScore !== undefined;
 
   const daysAgo = (date) => {
     const created = new Date(date);
