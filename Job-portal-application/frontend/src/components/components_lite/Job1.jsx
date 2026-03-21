@@ -11,11 +11,6 @@ const Job1 = ({ job }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { bookmarkedJobs = [] } = useSelector(store => store.job || {});
-<<<<<<< HEAD
-=======
-  
-  // Logic to check if this is a recommended job with a match score
->>>>>>> 8cd1599f968d3b91ac2bfcf5f9dc8291194f9719
   const hasMatchScore = job?.matchScore !== undefined;
 
   const daysAgo = (date) => {
@@ -34,7 +29,7 @@ const Job1 = ({ job }) => {
       .toUpperCase()
       .slice(0, 2);
   };
-  
+
   const isBookmarked = bookmarkedJobs.some(item => item._id === job._id) || false;
 
   return (
@@ -46,15 +41,15 @@ const Job1 = ({ job }) => {
       {/* Header: Time + Match Score + Bookmark */}
       <div className="flex justify-between items-center mb-3">
         <div className="flex items-center gap-2">
-           <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
-           
-           {/* --- AI MATCH BADGE --- */}
-           {hasMatchScore && (
-             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-bold text-emerald-700 uppercase tracking-tight">
-               <Sparkles className="h-2.5 w-2.5" />
-               {job.matchScore}% Match
-             </div>
-           )}
+          <p className="text-xs text-gray-500 font-medium">{daysAgo(job.createdAt)}</p>
+
+          {/* --- AI MATCH BADGE --- */}
+          {hasMatchScore && (
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 border border-emerald-100 text-[10px] font-bold text-emerald-700 uppercase tracking-tight">
+              <Sparkles className="h-2.5 w-2.5" />
+              {job.matchScore}% Match
+            </div>
+          )}
         </div>
 
         <Button
@@ -63,7 +58,7 @@ const Job1 = ({ job }) => {
           className="rounded-full hover:bg-emerald-50"
           onClick={(e) => {
             e.stopPropagation();
-            dispatch(setBookmarkedJobs(job)); 
+            dispatch(setBookmarkedJobs(job));
           }}
         >
           {isBookmarked ? (

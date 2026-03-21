@@ -95,7 +95,7 @@ const Description = () => {
   return (
     // Removed fixed heights to ensure content can expand as long as needed
     <div className="max-w-5xl mx-auto my-10 p-4 md:p-10 bg-white rounded-2xl shadow-sm border border-gray-100">
-      
+
       {/* HEADER SECTION */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
         <div className="flex items-center gap-6">
@@ -114,7 +114,7 @@ const Description = () => {
           <div>
             <div className="flex items-center gap-3 flex-wrap">
               <h1 className="text-3xl font-extrabold text-gray-900">{singleJob.title}</h1>
-              
+
               {/* AI Match Badge - Shown if available */}
               {singleJob.matchScore && (
                 <div className="flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full border border-emerald-100 text-sm font-bold animate-pulse">
@@ -147,9 +147,8 @@ const Description = () => {
             <Button
               onClick={isApplied ? null : applyJobHandler}
               disabled={isApplied}
-              className={`px-10 py-6 rounded-xl font-bold text-lg transition-all ${
-                isApplied ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 text-white"
-              }`}
+              className={`px-10 py-6 rounded-xl font-bold text-lg transition-all ${isApplied ? "bg-gray-200 text-gray-500 cursor-not-allowed" : "bg-emerald-600 hover:bg-emerald-700 text-white"
+                }`}
             >
               {isApplied ? "Application Submitted" : "Apply Now"}
             </Button>
