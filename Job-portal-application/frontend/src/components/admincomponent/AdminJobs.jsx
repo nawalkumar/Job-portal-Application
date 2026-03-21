@@ -8,7 +8,7 @@ import AdminJobsTable from "./AdminJobsTable";
 import useGetAllAdminJobs from "@/hooks/useGetAllJAdminobs";
 import { setSearchJobByText } from "@/redux/jobSlice";
 import { Plus } from "lucide-react";
-import Footer from "../components_lite/Footer";
+//import Footer from "../components_lite/Footer";
 
 const AdminJobs = () => {
   useGetAllAdminJobs();
@@ -43,7 +43,7 @@ const AdminJobs = () => {
           <AdminJobsTable />
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };

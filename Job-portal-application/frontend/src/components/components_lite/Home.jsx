@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import Navbar from "./Navbar";
 import Header from "./Header";
 import Categories from "./Categories";
+import RecommendedJobs from "./RecommendedJobs";
 import LatestJobs from "./LatestJobs";
 import Footer from "./Footer";
 import useGetAllJobs from "@/hooks/useGetAllJobs";
@@ -27,6 +28,7 @@ const Home = () => {
       <Navbar />
       <Header />
       <Categories />
+      <RecommendedJobs />
       {loading && <p>Loading jobs...</p>}
       {error && <p>Error: {error}</p>}
       {!loading && !error && <LatestJobs jobs={jobs} />}

@@ -7,6 +7,7 @@ const initialState = {
   searchJobByText: "",
   allAppliedJobs: [],
   searchedQuery: "",
+  recommendedJobs: [],
   // Added for Phase 1
   paginationData: {
     totalPages: 1,
@@ -24,6 +25,9 @@ const jobSlice = createSlice({
     // Added for Phase 1
     setPaginationData(state, action) {
       state.paginationData = action.payload;
+    },
+    setRecommendedJobs: (state, action) => {
+      state.recommendedJobs = action.payload;
     },
     // ... keep all your other reducers exactly as they are ...
     setSingleJob(state, action) { state.singleJob = action.payload; },
