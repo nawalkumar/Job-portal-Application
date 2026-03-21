@@ -30,7 +30,7 @@ const RecommendedJobs = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {/* Now .slice() is safe because we guaranteed recommendedJobs is an array */}
-                {recommendedJobs.slice(0, 3).map((job) => (
+                {recommendedJobs.slice(0, 6).map((job) => (
                     <Job1 key={job?._id} job={job} />
                 ))}
             </div>
