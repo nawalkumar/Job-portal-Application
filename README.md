@@ -1,67 +1,195 @@
-Automated Job Portal Application
+# 🚀 AI-Powered Talent Match & Job Retrieval System
 
-Tech Stack: MERN Stack (MongoDB, Express.js, React.js, Node.js, Tailwind CSS, REST API, JWT, Multer, Cloudinary)
+A **high-performance, full-stack recruitment platform** that leverages **local neural embeddings, semantic vector search, and asynchronous system design** to match candidate resumes with job listings based on **contextual understanding**, not just keywords.
 
-Project Overview
+---
 
-A full-stack job portal allowing users to browse and apply for jobs and recruiters to post job listings. Integrates real-time job data using Jooble and Adzuna APIs, with secure authentication, responsive UI, file uploads, and smooth user experience.
+## 🧠 🔥 Why This Project Stands Out
 
-Key Features
+Traditional job portals rely on **keyword matching**, which fails to capture meaning.
 
-Secure Authentication: Login/signup with JWT and cookie sessions.
+👉 This system uses:
+- **Transformer-based embeddings**
+- **Vector similarity search**
+- **Efficient system-level optimizations**
 
-Real-Time Job Listings: Integrated Jooble and Adzuna APIs for automated updates.
+to deliver **context-aware job recommendations** at scale.
 
-Resume Upload: Users can upload resumes securely; handled with Multer and stored on Cloudinary.
+---
 
-Responsive Design: Built with React.js and Tailwind CSS for mobile and desktop.
+## ⚡ Key Features 
 
-Robust Error Handling: Validations and error management for smooth workflow.
+### 🧠 Local Inference Engine
+- Uses **MiniLM-L6-v2 (384-dim embeddings)** via Transformers.js
+- Runs **fully locally** using ONNX Runtime  
+- ❌ No external API calls → ✅ Low latency + zero cost
 
-Installation
-Backend
-cd backend
-npm install
+---
 
+### 🔍 Semantic Vector Search
+- Implemented using **MongoDB Atlas Vector Search**
+- Uses **HNSW (Hierarchical Navigable Small World)** indexing- working
+- Enables **fast approximate nearest neighbor (ANN)** search- working
 
-Create a .env file (add to .gitignore to keep keys private):
+---
 
-MONGO_URI=<your-mongodb-uri>
-JWT_SECRET=<your-jwt-secret>
-CLOUDINARY_CLOUD_NAME=<your-cloudinary-cloud-name>
-CLOUDINARY_API_KEY=<your-cloudinary-api-key>
-CLOUDINARY_API_SECRET=<your-cloudinary-api-secret>
-ADZUNA_API_KEY=<your-adzuna-api-key>
-ADZUNA_APP_ID=<your-adzuna-app-id>
-JOOBLE_API_KEY=<your-jooble-api-key>
-PORT=5000
+### ⚙️ Decoupled Async Architecture
+- Uses **node-cron** for scheduled background jobs
+- Separates:
+  - I/O-bound tasks (API fetching)
+  - CPU-bound tasks (embedding generation)
+  
+👉 Improves scalability and system stability
 
-npm start
+---
 
+### 🧩 Context-Aware Chunking
+- Handles large resumes using:
+  - **512-token windowing**
+  - Recursive text splitting
+  
+👉 Works within transformer positional limits while preserving semantic context
+
+---
+
+## 🏗 System Architecture
+```
+External APIs (Jooble / Adzuna)
+↓
+[Ingestion Layer]
+(node-cron every 6 hrs)
+↓
+[Data Cleaning Layer]
+(HTML sanitization + regex)
+↓
+[Embedding Engine]
+(MiniLM + ONNX Runtime)
+↓
+[Vector Database]
+(MongoDB Atlas)
+↓
+[Matching Engine]
+(Cosine Similarity)
+↓
+[REST API Layer]
+↓
 Frontend
-cd frontend
-npm install
-npm start
+```
 
 
-Open http://localhost:3000
+---
 
-Future Enhancements
+## 🔄 Workflow
 
-Role-based dashboards for recruiters and job seekers.
+### 1. 📥 Data Ingestion
+- Jobs fetched every **6 hours** from external APIs
 
-Notifications/email alerts for new job postings.
+### 2. 🧠 Vectorization
+- Background worker:
+  - Detects new jobs
+  - Generates embeddings (384-dim vectors)
 
-Advanced search filters and saved job lists.
+### 3. 🔍 Semantic Matching
+- Resume → embedding
+- Compared with job vectors using **cosine similarity**
 
-Skills & Learning Outcomes
+### 4. 📊 Retrieval
+- Jobs ranked based on similarity score
+- Returned via REST API
 
-Full-stack MERN development
+---
 
-JWT authentication & secure session management
+## 🛠 Tech Stack
 
-REST API integration with Jooble and Adzuna
+### 💻 Frontend
+- React.js  
+- Redux Toolkit  
+- Tailwind CSS  
+- Shadcn/UI  
 
-File upload & cloud storage with Multer and Cloudinary
+### ⚙️ Backend
+- Node.js  
+- Express.js  
 
-Responsive UI design using Tailwind CSS
+### 🗄 Database
+- MongoDB Atlas (Vector Search)
+
+### 🧠 Machine Learning
+- Transformers.js  
+- ONNX Runtime  
+- MiniLM-L6-v2  
+
+### 🔄 Automation
+- Node-Cron  
+- Axios  
+- Jooble & Adzuna APIs  
+
+---
+
+## 📈 Performance & Optimizations
+
+### 🧠 Memory Management
+- Batch processing (20 jobs per cycle)
+- Prevents memory overflow during ONNX inference
+
+---
+
+### ⚡ Latency Optimization
+- Local embeddings → no API calls
+- Vector search → sub-linear retrieval (HNSW)
+
+---
+
+### 🧹 Data Integrity
+- HTML sanitization
+- Regex-based cleaning
+
+👉 Ensures high-quality embeddings (less noise)
+
+---
+
+## 🚦 Getting Started
+
+### ✅ Prerequisites
+- Node.js v18+
+- MongoDB Atlas (Vector Search enabled)
+
+---
+
+### 📦 Installation
+
+```bash
+git clone https://github.com/nawalkumar/Job-portal-Application.git
+cd Job-portal-Application
+```
+
+## ⚙️ Environment Setup
+
+Create .env file:
+```
+  PORT=5001
+  MONGO_URI=your_mongodb_uri
+  JWT_SECRET=your_secret
+  ADZUNA_APP_ID=your_id
+  ADZUNA_APP_KEY=your_key
+  JOOBLE_KEY=your_key
+```
+📥 Install Dependencies
+# Backend
+    npm install
+    
+# Frontend
+    cd frontend
+    npm install
+▶️ Run Application
+# Starts backend + cron jobs
+npm run dev- both for frontend and Backend
+
+# working on:
+- Uses **HNSW (Hierarchical Navigable Small World)** indexing
+- Enables **fast approximate nearest neighbor (ANN)** search
+
+Author:
+Naval Kumar,
+NIT Sikkim exchange student
+@IIT Hyderabad Final Year
