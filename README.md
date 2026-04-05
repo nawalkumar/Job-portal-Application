@@ -191,6 +191,6 @@ npm run dev- both for frontend and Backend
 
 Author:
 
-Naval Kumar,
-NIT Sikkim exchange student
-@IIT Hyderabad Final Year
+    Naval Kumar,
+    NIT Sikkim exchange student
+    @IIT Hyderabad Final Year
