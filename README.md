@@ -190,6 +190,7 @@ npm run dev- both for frontend and Backend
 - Enables **fast approximate nearest neighbor (ANN)** search
 
 Author:
+
 Naval Kumar,
 NIT Sikkim exchange student
 @IIT Hyderabad Final Year
