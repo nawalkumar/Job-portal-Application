@@ -45,8 +45,8 @@ const LatestJobs = () => {
             </button>
           </div>
         ) : allJobs.length === 0 ? (
-          <div className="flex items-center justify-center w-full h-[400px] text-gray-400">
-            No jobs found matching your criteria.
+          <div className="flex items-center justify-center w-full h-[700px] text-gray-600">
+           Railway Deployment need extension, please Extend your plan to live this service.
           </div>
         ) : (
           /* --- SHOW JOBS --- */
