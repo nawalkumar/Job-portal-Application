@@ -42,7 +42,7 @@ const Home = () => {
               Sign up today to see jobs tailored specifically for you.
             </p>
             <div className="flex justify-center gap-4">
-              <Link to="/signup">
+              <Link to="/register">
                 <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">Get Started</Button>
               </Link>
               <Link to="/login">
