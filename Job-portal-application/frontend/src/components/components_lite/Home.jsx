@@ -8,7 +8,7 @@ import RecommendedJobs from "./RecommendedJobs";
 import LatestJobs from "./LatestJobs";
 import Footer from "./Footer";
 import useGetAllJobs from "@/hooks/useGetAllJobs";
-import { Button } from "./ui/button"; // Assuming you use shadcn/ui or similar
+import { Button } from "../ui/button"; // Assuming you use shadcn/ui or similar
 
 const Home = () => {
   const { loading, error } = useGetAllJobs();
