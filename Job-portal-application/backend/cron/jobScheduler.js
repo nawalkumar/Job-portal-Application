@@ -2,6 +2,7 @@
 import cron from "node-cron";
 import connectDB from "../utils/db.js";
 import { fetchAdzunaJobs, fetchJoobleJobs } from "../services/jobFetcher.js";
+import { runEmbeddingMigration } from "../services/vectorWorker.js";
 
 const runJobFetch = async () => {
     console.log("Manual Run: Fetching latest jobs...");
@@ -22,4 +23,8 @@ const runJobFetch = async () => {
     await connectDB();
     cron.schedule("0 */6 * * *", runJobFetch);
     runJobFetch(); // Run immediately
+    cron.schedule("30 */6 * * *", async () => {
+        console.log("--- [CRON] Starting Vector Migration ---");
+        await runEmbeddingMigration();
+    });
 })();
