@@ -69,7 +69,7 @@ const Home = () => {
                 onSuccess={async (credentialResponse) => {
                   try {
                     // CRITICAL: Replace this string below with your exact public 5001 backend URL from Codespaces!
-                    const backendUrl = "https://laughing-space-umbrella-r7gqgxvj46w425xww-5001.app.github.dev"; 
+                    const backendUrl = "poetic-imagination-production-b2e9.up.railway.app"; 
                     
                     const res = await axios.post(`${backendUrl}/api/user/google-login`, {
                       token: credentialResponse.credential
