@@ -6,15 +6,14 @@ import { Sparkles } from 'lucide-react';
 
 const RecommendedJobs = () => {
     const { user } = useSelector(store => store.auth);
-
-    // Add " = [] " here to prevent 'undefined' errors
     const { recommendedJobs = [] } = useSelector(store => store.job);
 
+    // Call recommendations hook safely
     useGetRecommendedJobs();
 
     if (!user) return null;
 
-    // Safety check: Ensure recommendedJobs exists and has items
+    // Handled conditions upstream inside Home view. Safety escape container:
     if (!recommendedJobs || recommendedJobs.length === 0) {
         return null;
     }
@@ -29,7 +28,6 @@ const RecommendedJobs = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {/* Now .slice() is safe because we guaranteed recommendedJobs is an array */}
                 {recommendedJobs.slice(0, 6).map((job) => (
                     <Job1 key={job?._id} job={job} />
                 ))}

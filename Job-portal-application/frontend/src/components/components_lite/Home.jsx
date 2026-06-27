@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux"; // Added useDispatch
+import { useSelector, useDispatch } from "react-redux"; 
 import { useNavigate, Link } from "react-router-dom";
 import Navbar from "./Navbar";
 import Header from "./Header";
@@ -11,14 +11,15 @@ import useGetAllJobs from "@/hooks/useGetAllJobs";
 import { Button } from "../ui/button"; 
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
-import { setUser } from '@/redux/authSlice'; // Adjust this path if your slice file is named differently!
+import { setUser } from '@/redux/authSlice'; 
 
 const Home = () => {
   const { loading, error } = useGetAllJobs();
   const jobs = useSelector((state) => state.jobs.allJobs);
+  const { recommendedJobs = [] } = useSelector((store) => store.job);
   const { user } = useSelector((store) => store.auth);
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch(); 
 
   useEffect(() => {
     if (user?.role === "Recruiter") {
@@ -34,7 +35,27 @@ const Home = () => {
 
       {/* Conditional Rendering for Recommendations */}
       {user ? (
-        <RecommendedJobs />
+        // Check if the user has filled their details out or if recommendations came up empty
+        (!user.profile?.skills || user.profile.skills.length === 0 || recommendedJobs.length === 0) ? (
+          <div className="max-w-7xl mx-auto my-10 px-4">
+            <div className="bg-amber-50 border border-amber-200 rounded-xl p-8 text-center max-w-2xl mx-auto">
+              <h2 className="text-2xl font-bold text-amber-800 mb-2">
+                Complete Your Profile for AI Recommendations!
+              </h2>
+              <p className="text-gray-600 mb-6">
+                Our AI vector matching engine needs your resume or skills data to match you accurately. 
+                Please update your profile bio and add your skill sets to unlock curated job listings.
+              </p>
+              <Link to="/Profile">
+                <Button className="bg-[#6A38C2] hover:bg-[#5b30a6]">
+                  Go to Profile Dashboard
+                </Button>
+              </Link>
+            </div>
+          </div>
+        ) : (
+          <RecommendedJobs />
+        )
       ) : (
         <div className="max-w-7xl mx-auto my-10 px-4">
           <div className="bg-blue-50 border border-blue-200 rounded-xl p-8 text-center flex flex-col items-center">
@@ -68,15 +89,17 @@ const Home = () => {
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
                   try {
-                    // CRITICAL: Replace this string below with your exact public 5001 backend URL from Codespaces!
-                    const backendUrl = "poetic-imagination-production-b2e9.up.railway.app"; 
+                    // FIXED: Prefixed protocol string to absolute path structure
+                    const backendUrl = "https://poetic-imagination-production-b2e9.up.railway.app"; 
                     
                     const res = await axios.post(`${backendUrl}/api/user/google-login`, {
                       token: credentialResponse.credential
                     }, { withCredentials: true });
                     
                     if (res.data.success) {
-                      dispatch(setUser(res.data.user)); // Updates global app state instantly
+                      dispatch(setUser(res.data.user)); 
+                      // Forces application tree evaluation to immediately refresh layout flags
+                      window.location.reload(); 
                     }
                   } catch (err) {
                     console.error("Authentication submission failure:", err);
